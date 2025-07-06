@@ -20,7 +20,7 @@
 	<Stats />
 
 	<!-- Pricing section | 定价部分 -->
-	<Pricing />
+	<!-- <Pricing /> -->
 
 	<!-- FAQs section | 常见问题部分 -->
 	<FAQs />

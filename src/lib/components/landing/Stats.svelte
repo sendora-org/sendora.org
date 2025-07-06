@@ -21,26 +21,26 @@
 				label: m.stats_total_volume(),
 				value: '0',
 				suffix: '+',
-				target: 4
+				target: 2
 			},
 			{
 				label: m.stats_active_users(),
 				value: '0',
 				suffix: '+',
-				target: 100
+				target: 200
 			},
 			{
 				label: m.stats_transactions(),
 				value: '0',
 				suffix: '+',
 				target: 1000
-			},
-			{
-				label: m.stats_supported_chains(),
-				value: '0',
-				suffix: '+',
-				target: 5
 			}
+			// {
+			// 	label: m.stats_supported_chains(),
+			// 	value: '0',
+			// 	suffix: '+',
+			// 	target: 5
+			// }
 		];
 	}
 
@@ -137,7 +137,7 @@
 
 		<!-- Stats grid | 统计网格 -->
 
-		<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-8 sm:grid-cols-1 lg:grid-cols-3">
 			{#each getStats() as stat, index (index)}
 				<!-- Premium stat card | 高端统计卡片 -->
 				<div class="group relative text-center">

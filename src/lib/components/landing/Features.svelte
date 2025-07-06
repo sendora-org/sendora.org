@@ -37,9 +37,9 @@
 		// { icon: 'analytics', gradient: 'from-purple to-purple-light' },
 		{ icon: 'broadcast', gradient: 'from-yellow to-yellow-light' },
 		// { icon: 'balance', gradient: 'from-purple-dark to-purple' },
-		{ icon: 'signature', gradient: 'from-yellow-dark to-yellow' },
-		{ icon: 'deploy', gradient: 'from-purple to-yellow' },
-		{ icon: 'callthis', gradient: 'from-purple to-yellow' }
+		{ icon: 'signature', gradient: 'from-yellow-dark to-yellow' }
+		// { icon: 'deploy', gradient: 'from-purple to-yellow' },
+		// { icon: 'callthis', gradient: 'from-purple to-yellow' }
 		// { icon: 'multisend', gradient: 'from-yellow to-purple' }
 	];
 
@@ -140,7 +140,7 @@
 
 		<!-- Features grid | 功能网格 -->
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-2">
 			{#each getFeatures() as feature, index (index)}
 				<!-- Premium feature card | 高端功能卡片 -->
 				<div
