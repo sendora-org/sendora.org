@@ -1,4 +1,5 @@
-<script lang="ts">
+sha
+<!-- <script lang="ts">
 	import AppSidebar from '$lib/components/app-sidebar.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -34,4 +35,4 @@
 			<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
 		</div>
 	</Sidebar.Inset>
-</Sidebar.Provider>
+</Sidebar.Provider> -->
