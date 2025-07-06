@@ -1,3 +1,335 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--radius: 0.625rem;
+	--background: oklch(1 0 0);
+	--foreground: oklch(0.129 0.042 264.695);
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.129 0.042 264.695);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.129 0.042 264.695);
+	--primary: oklch(0.208 0.042 265.755);
+	--primary-foreground: oklch(0.984 0.003 247.858);
+	--secondary: oklch(0.968 0.007 247.896);
+	--secondary-foreground: oklch(0.208 0.042 265.755);
+	--muted: oklch(0.968 0.007 247.896);
+	--muted-foreground: oklch(0.554 0.046 257.417);
+	--accent: oklch(0.968 0.007 247.896);
+	--accent-foreground: oklch(0.208 0.042 265.755);
+	--destructive: oklch(0.577 0.245 27.325);
+	--border: oklch(0.929 0.013 255.508);
+	--input: oklch(0.929 0.013 255.508);
+	--ring: oklch(0.704 0.04 256.788);
+	--chart-1: oklch(0.646 0.222 41.116);
+	--chart-2: oklch(0.6 0.118 184.704);
+	--chart-3: oklch(0.398 0.07 227.392);
+	--chart-4: oklch(0.828 0.189 84.429);
+	--chart-5: oklch(0.769 0.188 70.08);
+	--sidebar: oklch(0.984 0.003 247.858);
+	--sidebar-foreground: oklch(0.129 0.042 264.695);
+	--sidebar-primary: oklch(0.208 0.042 265.755);
+	--sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+	--sidebar-accent: oklch(0.968 0.007 247.896);
+	--sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+	--sidebar-border: oklch(0.929 0.013 255.508);
+	--sidebar-ring: oklch(0.704 0.04 256.788);
+
+	/* Custom purple and yellow theme colors | 自定义紫色和黄色主题色 */
+	--purple: oklch(0.608 0.213 294.61); /* #7C3AED Royal Purple | 皇家紫 */
+	--purple-light: oklch(0.709 0.161 294.58); /* Lighter purple | 浅紫色 */
+	--purple-dark: oklch(0.507 0.253 294.64); /* Darker purple | 深紫色 */
+	--yellow: oklch(0.924 0.129 95.77); /* #FDE047 Lemon Yellow | 柠檬黄 */
+	--yellow-light: oklch(0.962 0.065 95.97); /* Lighter yellow | 浅黄色 */
+	--yellow-dark: oklch(0.836 0.189 85.09); /* Darker yellow | 深黄色 */
+}
+
+.dark {
+	--background: oklch(0.129 0.042 264.695);
+	--foreground: oklch(0.88 0.002 247.858); /* 降低前景色亮度 | Reduced foreground brightness */
+	--card: oklch(0.208 0.042 265.755);
+	--card-foreground: oklch(0.85 0.002 247.858); /* 卡片文本更柔和 | Softer card text */
+	--popover: oklch(0.208 0.042 265.755);
+	--popover-foreground: oklch(0.85 0.002 247.858); /* 弹窗文本更柔和 | Softer popover text */
+	--primary: oklch(0.8 0.015 255.508); /* 主色调降低亮度 | Reduced primary brightness */
+	--primary-foreground: oklch(0.208 0.042 265.755);
+	--secondary: oklch(0.279 0.041 260.031);
+	--secondary-foreground: oklch(0.8 0.002 247.858); /* 次要文本更柔和 | Softer secondary text */
+	--muted: oklch(0.279 0.041 260.031);
+	--muted-foreground: oklch(0.65 0.03 256.788); /* 弱化文本更柔和 | Softer muted text */
+	--accent: oklch(0.279 0.041 260.031);
+	--accent-foreground: oklch(0.8 0.002 247.858); /* 强调文本更柔和 | Softer accent text */
+	--destructive: oklch(0.704 0.191 22.216);
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.551 0.027 264.364);
+	--chart-1: oklch(0.488 0.243 264.376);
+	--chart-2: oklch(0.696 0.17 162.48);
+	--chart-3: oklch(0.769 0.188 70.08);
+	--chart-4: oklch(0.627 0.265 303.9);
+	--chart-5: oklch(0.645 0.246 16.439);
+	--sidebar: oklch(0.208 0.042 265.755);
+	--sidebar-foreground: oklch(0.82 0.002 247.858); /* 侧边栏文本更柔和 | Softer sidebar text */
+	--sidebar-primary: oklch(0.488 0.243 264.376);
+	--sidebar-primary-foreground: oklch(
+		0.82 0.002 247.858
+	); /* 侧边栏主要文本更柔和 | Softer sidebar primary text */
+	--sidebar-accent: oklch(0.279 0.041 260.031);
+	--sidebar-accent-foreground: oklch(
+		0.78 0.002 247.858
+	); /* 侧边栏强调文本更柔和 | Softer sidebar accent text */
+	--sidebar-border: oklch(1 0 0 / 10%);
+	--sidebar-ring: oklch(0.551 0.027 264.364);
+
+	/* Dark mode purple and yellow theme colors | 暗色模式紫色和黄色主题色 */
+	--purple: oklch(0.709 0.161 294.58); /* Lighter in dark mode | 暗色模式下更亮 */
+	--purple-light: oklch(0.808 0.113 294.55); /* Even lighter | 更亮 */
+	--purple-dark: oklch(0.608 0.213 294.61); /* Original purple | 原始紫色 */
+	--yellow: oklch(0.924 0.129 95.77); /* Keep bright yellow | 保持明亮黄色 */
+	--yellow-light: oklch(0.962 0.065 95.97); /* Very light yellow | 非常浅的黄色 */
+	--yellow-dark: oklch(0.836 0.189 85.09); /* Darker yellow | 深黄色 */
+}
+
+@theme inline {
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* Custom theme colors | 自定义主题色 */
+	--color-purple: var(--purple);
+	--color-purple-light: var(--purple-light);
+	--color-purple-dark: var(--purple-dark);
+	--color-yellow: var(--yellow);
+	--color-yellow-light: var(--yellow-light);
+	--color-yellow-dark: var(--yellow-dark);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+
+	/* Smooth scrolling | 平滑滚动 */
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* Custom selection colors | 自定义选择颜色 */
+	::selection {
+		background-color: var(--purple);
+		color: white;
+	}
+
+	/* 全局滚动条样式优化 | Global scrollbar style optimization */
+	/* Webkit browsers (Chrome, Safari, Edge) */
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: oklch(0.5 0.01 240 / 0.3);
+		border-radius: 4px;
+		transition: background-color 0.2s ease;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: oklch(0.4 0.02 240 / 0.5);
+	}
+
+	/* 暗色模式滚动条 | Dark mode scrollbar */
+	.dark ::-webkit-scrollbar-thumb {
+		background: oklch(0.7 0.01 240 / 0.4);
+	}
+
+	.dark ::-webkit-scrollbar-thumb:hover {
+		background: oklch(0.8 0.02 240 / 0.6);
+	}
+
+	/* Firefox 滚动条样式 | Firefox scrollbar styles */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: oklch(0.5 0.01 240 / 0.3) transparent;
+	}
+
+	.dark * {
+		scrollbar-color: oklch(0.7 0.01 240 / 0.4) transparent;
+	}
+
+	/* 小尺寸滚动条 | Small scrollbar for specific containers */
+	.scrollbar-thin::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+
+	.scrollbar-thin::-webkit-scrollbar-thumb {
+		background: oklch(0.5 0.01 240 / 0.25);
+		border-radius: 3px;
+	}
+
+	.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+		background: oklch(0.7 0.01 240 / 0.35);
+	}
+}
+
+/* Brand gradient patterns | 品牌渐变图案 */
+@layer utilities {
+	.brand-gradient {
+		background: linear-gradient(135deg, var(--purple) 0%, var(--yellow) 100%);
+	}
+
+	.brand-gradient-soft {
+		background: linear-gradient(135deg, var(--purple) / 10 0%, var(--yellow) / 10 100%);
+	}
+
+	.brand-gradient-mesh {
+		background-color: var(--background);
+		background-image:
+			radial-gradient(at 0% 0%, var(--purple) / 20 0px, transparent 50%),
+			radial-gradient(at 50% 0%, var(--yellow) / 10 0px, transparent 50%),
+			radial-gradient(at 100% 0%, var(--purple) / 20 0px, transparent 50%),
+			radial-gradient(at 0% 50%, var(--yellow) / 10 0px, transparent 50%),
+			radial-gradient(at 100% 50%, var(--purple) / 10 0px, transparent 50%),
+			radial-gradient(at 0% 100%, var(--purple) / 20 0px, transparent 50%),
+			radial-gradient(at 50% 100%, var(--yellow) / 10 0px, transparent 50%),
+			radial-gradient(at 100% 100%, var(--purple) / 20 0px, transparent 50%);
+	}
+
+	/* Section transitions | 区块过渡 */
+	.section-fade {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.section-fade::before {
+		content: '';
+		position: absolute;
+		top: -100px;
+		left: 0;
+		right: 0;
+		height: 200px;
+		background: linear-gradient(to bottom, transparent, var(--background));
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	/* Trust indicators | 信任指标 */
+	.trust-badge {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		background: var(--background);
+		border: 1px solid var(--border);
+		border-radius: 9999px;
+		font-weight: 500;
+		transition: all 0.3s ease;
+	}
+
+	.trust-badge:hover {
+		border-color: var(--purple);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px var(--purple) / 20;
+	}
+
+	/* Premium animations and effects | 高端动画和效果 */
+	@keyframes float-gentle {
+		0%,
+		100% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	@keyframes gradient-shift {
+		0%,
+		100% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+	}
+
+	@keyframes reveal-in {
+		from {
+			opacity: 0;
+			transform: translateY(20px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	.animate-float-gentle {
+		animation: float-gentle 6s ease-in-out infinite;
+	}
+
+	.animate-gradient-shift {
+		background-size: 200% 200%;
+		animation: gradient-shift 4s ease infinite;
+	}
+
+	.animate-reveal-in {
+		animation: reveal-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	/* Brand shadow utilities | 品牌阴影工具 */
+	.shadow-brand {
+		box-shadow:
+			0 10px 25px -3px var(--purple) / 15,
+			0 4px 6px -2px var(--purple) / 8;
+	}
+
+	.shadow-brand-lg {
+		box-shadow:
+			0 20px 40px -12px var(--purple) / 20,
+			0 8px 16px -8px var(--purple) / 12;
+	}
+}
