@@ -141,7 +141,7 @@
 		<!-- Features grid | 功能网格 -->
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-			{#each getFeatures() as feature, index}
+			{#each getFeatures() as feature, index (index)}
 				<!-- Premium feature card | 高端功能卡片 -->
 				<div
 					class="feature-card-wrapper animate-fade-in-up"

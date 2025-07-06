@@ -138,7 +138,7 @@
 		<!-- Stats grid | 统计网格 -->
 
 		<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-			{#each getStats() as stat, index}
+			{#each getStats() as stat, index (index)}
 				<!-- Premium stat card | 高端统计卡片 -->
 				<div class="group relative text-center">
 					<!-- Card background with subtle gradient | 带微妙渐变的卡片背景 -->

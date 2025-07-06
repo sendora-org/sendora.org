@@ -3,6 +3,8 @@
 	import ThemeToggle from '$lib/components/ui/theme-toggle.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { setLocale, getLocale } from '$lib/paraglide/runtime.js';
+
+	let currentLocale = $derived(getLocale());
 </script>
 
 <!-- Footer section | 页脚区域 -->
@@ -23,28 +25,28 @@
 			<!-- Right side - Language and theme controls | 右侧 - 语言和主题控制 -->
 			<div class="flex items-center gap-4">
 				<!-- Language switcher | 语言切换器 -->
-				<!-- {#key $currentLocale} -->
+				<!-- {#key currentLocale} -->
 				<div class="flex items-center gap-2">
 					<span class="text-muted-foreground text-sm">{m.language_label()}:</span>
 					<div class="flex gap-1">
 						<!-- English button | 英文按钮 -->
-						<!-- <Button
-							variant={$currentLocale === 'en' ? 'default' : 'ghost'}
+						<Button
+							variant={currentLocale === 'en-us' ? 'default' : 'ghost'}
 							size="sm"
-							onclick={() => switchLanguage('en')}
-							class={$currentLocale === 'en' ? 'bg-purple hover:bg-purple-dark' : ''}
+							onclick={() => setLocale('en-us')}
+							class={currentLocale === 'en-us' ? 'bg-purple hover:bg-purple-dark' : ''}
 						>
 							EN
-						</Button> -->
+						</Button>
 						<!-- Chinese button | 中文按钮 -->
-						<!-- <Button
-							variant={$currentLocale === 'zh' ? 'default' : 'ghost'}
+						<Button
+							variant={currentLocale === 'zh-cn' ? 'default' : 'ghost'}
 							size="sm"
-							onclick={() => switchLanguage('zh')}
-							class={$currentLocale === 'zh' ? 'bg-purple hover:bg-purple-dark' : ''}
+							onclick={() => setLocale('zh-cn')}
+							class={currentLocale === 'zh-cn' ? 'bg-purple hover:bg-purple-dark' : ''}
 						>
 							中文
-						</Button> -->
+						</Button>
 					</div>
 				</div>
 

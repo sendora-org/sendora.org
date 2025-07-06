@@ -4,7 +4,7 @@
 
 	// No need for reactive text bindings - use messages directly in template | 无需响应式文本绑定 - 直接在模板中使用消息
 
-	const bgSvg = `'data:image/svg+xml;utf8,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><defs><pattern id=\"grid\" width=\"60\" height=\"60\" patternUnits=\"userSpaceOnUse\"><path d=\"M 60 0 L 0 0 0 60\" fill=\"none\" stroke=\"%23a855f7\" stroke-width=\"0.5\" opacity=\"0.3\"/><circle cx=\"30\" cy=\"30\" r=\"1.5\" fill=\"%23a855f7\" opacity=\"0.4\"/><polygon points=\"15,10 25,10 20,20\" fill=\"%23eab308\" opacity=\"0.2\"/><polygon points=\"35,40 45,40 40,50\" fill=\"%23a855f7\" opacity=\"0.2\"/></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(%23grid)\"/></svg>'`;
+	const bgSvg = `'data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="%23a855f7" stroke-width="0.5" opacity="0.3"/><circle cx="30" cy="30" r="1.5" fill="%23a855f7" opacity="0.4"/><polygon points="15,10 25,10 20,20" fill="%23eab308" opacity="0.2"/><polygon points="35,40 45,40 40,50" fill="%23a855f7" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>'`;
 </script>
 
 <!-- Update page title | 更新页面标题 -->

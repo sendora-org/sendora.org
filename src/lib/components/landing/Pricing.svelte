@@ -22,14 +22,14 @@
 	}
 
 	// Payment modal state | 支付模态框状态
-	let showPaymentModal = $state(false);
-	let selectedPlan = $state<PricingPlan | null>(null);
+	// let showPaymentModal = $state(false);
+	// let selectedPlan = $state<PricingPlan | null>(null);
 
 	// Handle purchase button click | 处理购买按钮点击
-	function handlePurchaseClick(plan: PricingPlan) {
-		selectedPlan = plan;
-		showPaymentModal = true;
-	}
+	// function handlePurchaseClick(plan: PricingPlan) {
+	// 	selectedPlan = plan;
+	// 	showPaymentModal = true;
+	// }
 
 	// Get pricing plans dynamically | 动态获取定价方案
 	function getPlans(): PricingPlan[] {
@@ -128,7 +128,7 @@
 		<!-- Pricing cards | 定价卡片 -->
 
 		<div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
-			{#each getPlans() as plan}
+			{#each getPlans() as plan, index (index)}
 				<!-- Premium pricing card | 高端定价卡片 -->
 				<div class="pricing-card-wrapper relative">
 					{#if plan.highlighted}
@@ -194,7 +194,7 @@
 						<CardContent class="space-y-6">
 							<!-- Enhanced features list | 增强的功能列表 -->
 							<ul class="space-y-4">
-								{#each plan.features as feature}
+								{#each plan.features as feature, index (index)}
 									<li class="group flex items-start gap-3">
 										<!-- Premium check icon | 高端勾选图标 -->
 										<div

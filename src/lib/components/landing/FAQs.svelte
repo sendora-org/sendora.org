@@ -105,7 +105,7 @@
 		<!-- FAQ items | FAQ 项目 -->
 
 		<div class="space-y-4">
-			{#each getFAQs() as faq, index}
+			{#each getFAQs() as faq, index (index)}
 				<!-- Premium FAQ item | 高端 FAQ 项目 -->
 				<div class="faq-item-wrapper">
 					<Collapsible
