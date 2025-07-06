@@ -57,7 +57,8 @@
 	},
 	"dependencies": {
 		"@inlang/paraglide-js": "^2.0.0",
-		"lucide-svelte": "^0.525.0"
+		"lucide-svelte": "^0.525.0",
+		"viem": "^2.31.7"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
