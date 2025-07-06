@@ -2,7 +2,7 @@
 	import Hero from '$lib/components/landing/Hero.svelte';
 	import Features from '$lib/components/landing/Features.svelte';
 	import Stats from '$lib/components/landing/Stats.svelte';
-	import Pricing from '$lib/components/landing/Pricing.svelte';
+	// import Pricing from '$lib/components/landing/Pricing.svelte';
 	import FAQs from '$lib/components/landing/FAQs.svelte';
 	import CTA from '$lib/components/landing/CTA.svelte';
 	import Footer from '$lib/components/landing/Footer.svelte';

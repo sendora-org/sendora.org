@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ThemeToggle from '$lib/components/ui/theme-toggle.svelte';
-	import * as m from '$lib/paraglide/messages.js';
 	import LangToggle from '$lib/components/ui/lang-toggle.svelte';
 </script>
 
@@ -82,16 +81,6 @@
 							</svg>
 						</a>
 					</div>
-
-					<!-- Bottom links | 底部链接 -->
-					<!-- <div class="text-muted-foreground flex flex-wrap justify-center gap-6 text-sm">
-				<a href="#features" class="hover:text-purple transition-colors">{m.nav_features()}</a>
-
-				<span class="text-muted-foreground/50">•</span>
-				<a href="/privacy" class="hover:text-purple transition-colors">{m.nav_privacy()}</a>
-				<span class="text-muted-foreground/50">•</span>
-				<a href="/terms" class="hover:text-purple transition-colors">{m.nav_terms()}</a>
-			</div> -->
 				</div>
 			</div>
 
