@@ -223,8 +223,8 @@
 							</ul>
 
 							<!-- Premium CTA button | 高端行动按钮 -->
+							<!-- 		onclick={() => handlePurchaseClick(plan)} -->
 							<Button
-								onclick={() => handlePurchaseClick(plan)}
 								class="w-full py-6 text-lg font-semibold transition-all duration-300 {plan.highlighted
 									? 'from-purple to-purple-dark hover:from-purple-dark hover:to-purple bg-gradient-to-r text-white shadow-lg hover:shadow-xl'
 									: 'border-foreground/20 hover:border-purple/50 hover:bg-purple/5'}"
