@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex w-full items-center justify-between gap-2">
-	<span class="text-muted-foreground text-sm">{m.language_label()}:</span>
+	<span class="text-muted-foreground text-xs">{m.language_label()}:</span>
 	<div class="flex gap-1">
 		<!-- English button | 英文按钮 -->
 		<Button

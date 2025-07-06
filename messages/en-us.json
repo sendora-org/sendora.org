@@ -1053,5 +1053,6 @@
 	"txanalyzer_error_hash_required": "Transaction hash is required",
 	"txanalyzer_error_invalid_hash": "Invalid transaction hash format",
 	"txanalyzer_error_service_not_initialized": "Analyzer service not initialized",
-	"txanalyzer_error_analysis_failed": "Failed to analyze transaction"
+	"txanalyzer_error_analysis_failed": "Failed to analyze transaction",
+	"theme": "Theme"
 }

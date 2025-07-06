@@ -1052,5 +1052,6 @@
 	"txanalyzer_error_hash_required": "需要交易哈希",
 	"txanalyzer_error_invalid_hash": "无效的交易哈希格式",
 	"txanalyzer_error_service_not_initialized": "分析器服务未初始化",
-	"txanalyzer_error_analysis_failed": "分析交易失败"
+	"txanalyzer_error_analysis_failed": "分析交易失败",
+	"theme": "主题"
 }

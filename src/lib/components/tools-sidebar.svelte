@@ -198,7 +198,7 @@
 
 			<!-- Theme toggle | 主题切换 -->
 			<div class="flex items-center justify-between">
-				<span class="text-muted-foreground text-xs">Theme</span>
+				<span class="text-muted-foreground text-xs">{m.theme()}</span>
 				<ThemeToggle />
 			</div>
 
