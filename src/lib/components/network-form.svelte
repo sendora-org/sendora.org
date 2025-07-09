@@ -65,13 +65,13 @@
 
 	// Track previous network to avoid unnecessary updates | 跟踪上一个网络以避免不必要的更新
 	let previousNetwork = $state<NetworkInfo | null>(null);
-	
+
 	// Watch for network prop changes and update form data | 监听 network prop 变化并更新表单数据
 	$effect(() => {
 		// Only update if network has actually changed | 只在网络确实发生变化时更新
 		if (network && network !== previousNetwork) {
 			previousNetwork = network;
-			
+
 			// Load network data into form | 将网络数据加载到表单
 			formData = {
 				name: network.name,
@@ -86,11 +86,11 @@
 				blockGasLimit: network.blockGasLimit,
 				features: network.features
 			};
-			
+
 			// Find the index of default RPC | 查找默认 RPC 的索引
 			const defaultIndex = formData.rpcURLs.findIndex((url) => url === network.rpcURL);
 			selectedRpcIndex = defaultIndex !== -1 ? defaultIndex : 0;
-			
+
 			// Clear any existing network detection | 清除已存在网络检测
 			existingNetwork = null;
 		} else if (!network && previousNetwork) {
@@ -188,6 +188,25 @@
 		try {
 			// Filter out empty RPC URLs | 过滤空的 RPC URLs
 			const validRpcUrls = formData.rpcURLs.filter((url) => url.trim());
+
+			// Test all RPC endpoints before saving | 保存前测试所有 RPC 端点
+			await testAllRpcEndpoints();
+
+			// Check if any RPC failed validation | 检查是否有 RPC 验证失败
+			const failedRpcs: string[] = [];
+			validRpcUrls.forEach((url) => {
+				const originalIndex = formData.rpcURLs.findIndex((rpcUrl) => rpcUrl === url);
+				const status = rpcStatuses[originalIndex];
+				if (status && status.isValid === false) {
+					failedRpcs.push(`${url}: ${status.error}`);
+				}
+			});
+
+			if (failedRpcs.length > 0) {
+				errors.general = `Cannot save network. ${failedRpcs.length} RPC endpoint${failedRpcs.length > 1 ? 's' : ''} failed validation. Please check the RPC status above.`;
+				isSubmitting = false;
+				return;
+			}
 
 			// Determine default RPC based on selection | 根据选择确定默认 RPC
 			const defaultRpc =
@@ -358,7 +377,7 @@
 	<!-- General error | 通用错误 -->
 	{#if errors.general}
 		<div
-			class="bg-destructive/15 border-destructive/20 text-destructive rounded-md border p-3 text-sm"
+			class="bg-destructive/15 border-destructive/20 text-destructive rounded-md border p-3 text-sm whitespace-pre-line"
 		>
 			{errors.general}
 		</div>
@@ -447,7 +466,7 @@
 			</div>
 		</div>
 		<div class="space-y-3">
-			{#each formData.rpcURLs as rpcURL, index (`${index}-${rpcURL}`)}
+			{#each formData.rpcURLs as rpcURL, index (index)}
 				<div class="space-y-1">
 					<div class="flex items-center gap-2">
 						<!-- Radio button for default RPC selection | 默认 RPC 选择单选按钮 -->
@@ -553,7 +572,12 @@
 			{m.network_form_cancel()}
 		</Button>
 		<Button type="submit" class="flex-1" disabled={isSubmitting}>
-			{isSubmitting ? 'Saving...' : m.network_form_save()}
+			{#if isSubmitting}
+				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
+				Validating RPCs...
+			{:else}
+				{m.network_form_save()}
+			{/if}
 		</Button>
 	</div>
 </form>

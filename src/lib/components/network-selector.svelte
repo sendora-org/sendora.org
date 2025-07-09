@@ -309,7 +309,7 @@
 
 <!-- Network form sheet | 网络表单页面 -->
 <Sheet.Root bind:open={showNetworkForm}>
-	<Sheet.Content side="right" class="w-[400px]">
+	<Sheet.Content side="right" class="w-full sm:w-[400px] overflow-y-auto">
 		<Sheet.Header>
 			<Sheet.Title>
 				{editingNetwork ? m.network_selector_edit_network() : m.network_selector_add_network()}
