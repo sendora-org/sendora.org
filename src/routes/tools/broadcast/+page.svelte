@@ -145,7 +145,7 @@
 	<div class="space-y-4">
 		<!-- Network Selection Display | 网络选择显示 -->
 
-		<NetworkDisplay network={$selectedNetwork} showNoWalletNote={true} />
+		<NetworkDisplay network={$selectedNetwork} />
 		<!-- Transaction Input | 交易输入 -->
 		<Card class="relative p-6">
 			{#if isLoading}

@@ -1,6 +1,12 @@
 {
 	"permissions": {
-		"allow": ["Bash(pnpm format:*)", "Bash(pnpm lint:*)", "Bash(sed:*)"],
+		"allow": [
+			"Bash(pnpm format:*)",
+			"Bash(pnpm lint:*)",
+			"Bash(sed:*)",
+			"Bash(pnpm check:*)",
+			"Bash(npx eslint:*)"
+		],
 		"deny": []
 	}
 }

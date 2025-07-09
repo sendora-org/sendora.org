@@ -22,7 +22,7 @@
 		title,
 		description,
 		pageTitle,
-		containerClass = 'flex flex-1 flex-col gap-6 p-4 md:p-8',
+		containerClass = 'flex flex-1 flex-col gap-2 p-2 md:p-8',
 		maxWidth = 'max-w-4xl',
 		headerExtra,
 		children
