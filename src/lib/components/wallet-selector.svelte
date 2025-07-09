@@ -83,7 +83,6 @@
 			error = err.message || m.wallet_connect_error();
 			showQRCode = false;
 			qrCodeUri = undefined;
-
 		} finally {
 			loading = false;
 			connectingWallet = null;
