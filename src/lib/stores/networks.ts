@@ -7,13 +7,25 @@ import { networks as defaultNetworks, type NetworkInfo } from '$lib/config/netwo
 // Re-export NetworkInfo type for other components | 重新导出 NetworkInfo 类型供其他组件使用
 export type { NetworkInfo };
 
+// Type for serialized network info where bigints are converted to strings | 序列化网络信息的类型，其中 bigint 转换为字符串
+type SerializedNetworkInfo = Omit<NetworkInfo, 'blockTime' | 'blockGasLimit'> & {
+	blockTime: string;
+	blockGasLimit: string;
+};
+
+// Type for partially serialized network info | 部分序列化网络信息的类型
+type PartialSerializedNetworkInfo = Omit<Partial<NetworkInfo>, 'blockTime' | 'blockGasLimit'> & {
+	blockTime?: string;
+	blockGasLimit?: string;
+};
+
 // Custom networks storage key | 自定义网络存储键
 const CUSTOM_NETWORKS_KEY = 'sendora_custom_networks';
 // Built-in network overrides storage key | 内置网络覆盖存储键
 const NETWORK_OVERRIDES_KEY = 'sendora_network_overrides';
 
 // Serialize network info to handle bigint | 序列化网络信息以处理 bigint
-function serializeNetworkInfo(network: NetworkInfo): any {
+function serializeNetworkInfo(network: NetworkInfo): SerializedNetworkInfo {
 	return {
 		...network,
 		blockTime: network.blockTime.toString(),
@@ -22,7 +34,7 @@ function serializeNetworkInfo(network: NetworkInfo): any {
 }
 
 // Deserialize network info to restore bigint | 反序列化网络信息以恢复 bigint
-function deserializeNetworkInfo(data: any): NetworkInfo {
+function deserializeNetworkInfo(data: SerializedNetworkInfo): NetworkInfo {
 	return {
 		...data,
 		blockTime: BigInt(data.blockTime || '12000'),
@@ -31,25 +43,31 @@ function deserializeNetworkInfo(data: any): NetworkInfo {
 }
 
 // Serialize partial network info for overrides | 序列化部分网络信息用于覆盖
-function serializePartialNetworkInfo(override: Partial<NetworkInfo>): any {
-	const result: any = { ...override };
-	if (override.blockTime !== undefined) {
-		result.blockTime = override.blockTime.toString();
+function serializePartialNetworkInfo(override: Partial<NetworkInfo>): PartialSerializedNetworkInfo {
+	// Extract blockTime and blockGasLimit separately | 分别提取 blockTime 和 blockGasLimit
+	const { blockTime, blockGasLimit, ...rest } = override;
+	const result: PartialSerializedNetworkInfo = { ...rest };
+
+	if (blockTime !== undefined) {
+		result.blockTime = blockTime.toString();
 	}
-	if (override.blockGasLimit !== undefined) {
-		result.blockGasLimit = override.blockGasLimit.toString();
+	if (blockGasLimit !== undefined) {
+		result.blockGasLimit = blockGasLimit.toString();
 	}
 	return result;
 }
 
 // Deserialize partial network info | 反序列化部分网络信息
-function deserializePartialNetworkInfo(data: any): Partial<NetworkInfo> {
-	const result: Partial<NetworkInfo> = { ...data };
-	if (data.blockTime !== undefined) {
-		result.blockTime = BigInt(data.blockTime);
+function deserializePartialNetworkInfo(data: PartialSerializedNetworkInfo): Partial<NetworkInfo> {
+	// Extract blockTime and blockGasLimit separately | 分别提取 blockTime 和 blockGasLimit
+	const { blockTime, blockGasLimit, ...rest } = data;
+	const result: Partial<NetworkInfo> = { ...rest };
+
+	if (blockTime !== undefined) {
+		result.blockTime = BigInt(blockTime);
 	}
-	if (data.blockGasLimit !== undefined) {
-		result.blockGasLimit = BigInt(data.blockGasLimit);
+	if (blockGasLimit !== undefined) {
+		result.blockGasLimit = BigInt(blockGasLimit);
 	}
 	return result;
 }
@@ -90,7 +108,7 @@ function loadNetworkOverrides(): Record<string, Partial<NetworkInfo>> {
 		const overrides: Record<string, Partial<NetworkInfo>> = {};
 
 		for (const [chainId, override] of Object.entries(data)) {
-			overrides[chainId] = deserializePartialNetworkInfo(override);
+			overrides[chainId] = deserializePartialNetworkInfo(override as PartialSerializedNetworkInfo);
 		}
 
 		return overrides;
@@ -105,7 +123,7 @@ function saveNetworkOverrides(overrides: Record<string, Partial<NetworkInfo>>): 
 	if (!browser) return;
 
 	try {
-		const serialized: Record<string, any> = {};
+		const serialized: Record<string, PartialSerializedNetworkInfo> = {};
 
 		for (const [chainId, override] of Object.entries(overrides)) {
 			serialized[chainId] = serializePartialNetworkInfo(override);
@@ -232,7 +250,7 @@ export function updateCustomNetwork(chainId: string, updatedNetwork: NetworkInfo
 				}
 
 				if (hasChanged) {
-					(changes as any)[k] = updatedNetwork[k];
+					(changes as Record<string, unknown>)[k] = updatedNetwork[k];
 				}
 			}
 
