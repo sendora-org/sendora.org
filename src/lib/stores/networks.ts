@@ -177,10 +177,16 @@ export const customNetworks = writable<NetworkInfo[]>(customNetworksList);
 // Add a custom network | 添加自定义网络
 export function addCustomNetwork(network: NetworkInfo): void {
 	customNetworks.update((networks) => {
-		// Check if network already exists by chainId | 通过链 ID 检查网络是否已存在
-		const exists = networks.some((n) => n.chainId === network.chainId);
-		if (exists) {
-			throw new Error('Network with this Chain ID already exists');
+		// Check if network already exists by chainId in custom networks | 通过链 ID 检查自定义网络中是否已存在
+		const existsInCustom = networks.some((n) => n.chainId === network.chainId);
+		if (existsInCustom) {
+			throw new Error('Network with this Chain ID already exists in custom networks');
+		}
+
+		// Check if network already exists by chainId in built-in networks | 通过链 ID 检查内置网络中是否已存在
+		const existsInBuiltIn = defaultNetworks.some((n) => n.chainId === network.chainId);
+		if (existsInBuiltIn) {
+			throw new Error('Network with this Chain ID already exists in built-in networks');
 		}
 
 		const updated = [...networks, network];
