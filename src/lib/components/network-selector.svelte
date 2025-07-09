@@ -144,6 +144,14 @@
 		handleFormClose();
 	}
 
+	// Handle switching from add to edit mode | 处理从添加切换到编辑模式
+	function handleSwitchToEdit(network: NetworkInfo) {
+		// Set the network to edit | 设置要编辑的网络
+		editingNetwork = network;
+		// Keep the form open | 保持表单打开
+		showNetworkForm = true;
+	}
+
 	// Get network logo path | 获取网络 logo 路径
 	function getNetworkLogo(network: NetworkInfo): string {
 		return `/chain-logo/evm_${network.chainId}.png`;
@@ -308,6 +316,11 @@
 			</Sheet.Title>
 		</Sheet.Header>
 
-		<NetworkForm network={editingNetwork} onclose={handleFormClose} onsave={handleFormSave} />
+		<NetworkForm
+			network={editingNetwork}
+			onclose={handleFormClose}
+			onsave={handleFormSave}
+			onswitchtoedit={handleSwitchToEdit}
+		/>
 	</Sheet.Content>
 </Sheet.Root>

@@ -4,7 +4,12 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as m from '$lib/paraglide/messages.js';
-	import { addCustomNetwork, updateCustomNetwork, type NetworkInfo } from '$lib/stores/networks.js';
+	import {
+		addCustomNetwork,
+		updateCustomNetwork,
+		getNetworkByChainId,
+		type NetworkInfo
+	} from '$lib/stores/networks.js';
 	import { createPublicClient, http } from 'viem';
 	import { Loader2, CheckCircle2, XCircle, AlertCircle } from '@lucide/svelte';
 
@@ -16,9 +21,11 @@
 		onclose?: () => void;
 		/** Callback when network is saved | 网络保存时的回调 */
 		onsave?: (network: NetworkInfo) => void;
+		/** Callback when switching to edit mode | 切换到编辑模式时的回调 */
+		onswitchtoedit?: (network: NetworkInfo) => void;
 	}
 
-	let { network = null, onclose, onsave }: Props = $props();
+	let { network = null, onclose, onsave, onswitchtoedit }: Props = $props();
 
 	// Form state | 表单状态
 	let formData = $state({
@@ -42,6 +49,9 @@
 	let errors = $state<Record<string, string>>({});
 	let isSubmitting = $state(false);
 
+	// Existing network detection | 已存在网络检测
+	let existingNetwork = $state<NetworkInfo | null>(null);
+
 	// RPC validation state | RPC 验证状态
 	interface RpcStatus {
 		isChecking: boolean;
@@ -53,21 +63,30 @@
 
 	let rpcStatuses = $state<Record<number, RpcStatus>>({});
 
-	// Initialize RPC URLs and selected index | 初始化 RPC URLs 和选中索引
+	// Watch for network prop changes and update form data | 监听 network prop 变化并更新表单数据
 	$effect(() => {
 		if (network) {
-			// When editing an existing network | 编辑现有网络时
-			if (formData.rpcURLs.length === 1 && formData.rpcURLs[0] === '') {
-				formData.rpcURLs = [...network.rpcURLs];
-			}
+			// Load network data into form | 将网络数据加载到表单
+			formData = {
+				name: network.name,
+				rpcURL: network.rpcURL,
+				rpcURLs: network.rpcURLs,
+				chainId: network.chainId,
+				symbol: network.symbol,
+				explorerURL: network.explorerURL,
+				isTestnet: network.isTestnet,
+				isPopular: network.isPopular,
+				blockTime: network.blockTime,
+				blockGasLimit: network.blockGasLimit,
+				features: network.features
+			};
+			
 			// Find the index of default RPC | 查找默认 RPC 的索引
 			const defaultIndex = formData.rpcURLs.findIndex((url) => url === network.rpcURL);
 			selectedRpcIndex = defaultIndex !== -1 ? defaultIndex : 0;
-		} else {
-			// When adding a new network | 添加新网络时
-			// Ensure first non-empty RPC is selected | 确保选中第一个非空 RPC
-			const firstNonEmptyIndex = formData.rpcURLs.findIndex((url) => url.trim());
-			selectedRpcIndex = firstNonEmptyIndex !== -1 ? firstNonEmptyIndex : 0;
+			
+			// Clear any existing network detection | 清除已存在网络检测
+			existingNetwork = null;
 		}
 	});
 
@@ -82,6 +101,17 @@
 		) {
 			const firstValidIndex = formData.rpcURLs.findIndex((url) => url.trim());
 			selectedRpcIndex = firstValidIndex !== -1 ? firstValidIndex : 0;
+		}
+	});
+
+	// Check if chain ID already exists when adding new network | 添加新网络时检查链 ID 是否已存在
+	$effect(() => {
+		// Only check when adding new network, not editing | 仅在添加新网络时检查，编辑时不检查
+		if (!network && formData.chainId.trim() && /^\d+$/.test(formData.chainId)) {
+			const existing = getNetworkByChainId(formData.chainId.trim());
+			existingNetwork = existing || null;
+		} else {
+			existingNetwork = null;
 		}
 	});
 
@@ -298,6 +328,14 @@
 
 		await Promise.all(promises);
 	}
+
+	// Switch to edit mode for existing network | 切换到编辑已存在网络的模式
+	function switchToEditMode() {
+		if (!existingNetwork) return;
+
+		// Notify parent component to switch to edit mode | 通知父组件切换到编辑模式
+		onswitchtoedit?.(existingNetwork);
+	}
 </script>
 
 <!-- Network form | 网络表单 -->
@@ -355,6 +393,17 @@
 			<div class="flex items-start gap-2 text-amber-600 dark:text-amber-400">
 				<AlertCircle class="mt-0.5 h-4 w-4" />
 				<span class="text-sm">Warning: One or more RPC endpoints report a different chain ID</span>
+			</div>
+		{/if}
+		{#if !network && existingNetwork}
+			<div class="flex items-start gap-2 text-blue-600 dark:text-blue-400">
+				<AlertCircle class="mt-0.5 h-4 w-4" />
+				<span class="text-sm">
+					This Chain ID already exists for network "{existingNetwork.name}".
+					<button type="button" class="underline hover:no-underline" onclick={switchToEditMode}>
+						Click here to edit it instead
+					</button>
+				</span>
 			</div>
 		{/if}
 	</div>
