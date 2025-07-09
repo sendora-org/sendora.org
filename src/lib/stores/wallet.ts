@@ -110,7 +110,14 @@ export async function discoverWallets(): Promise<void> {
 }
 
 // Connect to a wallet | 连接钱包
-export async function connectWallet(walletInfo: WalletInfo, options?: any): Promise<void> {
+export async function connectWallet(
+	walletInfo: WalletInfo,
+	options?: {
+		walletconnect?: unknown;
+		coinbase?: unknown;
+		qrCodeCallback?: (uri: string | undefined) => void;
+	}
+): Promise<void> {
 	console.log('🚀 STORE: connectWallet function called with:', walletInfo);
 	console.log('🚀 STORE: Options:', options);
 
@@ -120,7 +127,7 @@ export async function connectWallet(walletInfo: WalletInfo, options?: any): Prom
 
 		// Create provider based on wallet type | 根据钱包类型创建提供者
 		switch (walletInfo.type) {
-			case 'injected':
+			case 'injected': {
 				// Find the provider from discovered wallets | 从发现的钱包中找到提供者
 				const injectedProviders = await InjectedWalletProvider.discoverWallets();
 				const injectedProvider = injectedProviders.find(
@@ -137,18 +144,23 @@ export async function connectWallet(walletInfo: WalletInfo, options?: any): Prom
 					provider = legacyProvider;
 				}
 				break;
+			}
 
-			case 'walletconnect':
-				provider = new WalletConnectProvider(options?.walletconnect || {});
+			case 'walletconnect': {
+				const wcProvider = new WalletConnectProvider(options?.walletconnect || {});
 				// Set up QR code callback if provided in options | 如果选项中提供了二维码回调，则设置
-				if (options?.qrCodeCallback && typeof (provider as any).setQrCodeCallback === 'function') {
-					(provider as any).setQrCodeCallback(options.qrCodeCallback);
+				if (options?.qrCodeCallback && typeof wcProvider.setQrCodeCallback === 'function') {
+					wcProvider.setQrCodeCallback(options.qrCodeCallback);
 				}
+				provider = wcProvider;
 				break;
+			}
 
-			case 'coinbase':
-				provider = new CoinbaseWalletProvider(options?.coinbase || {});
+			case 'coinbase': {
+				const cbProvider = new CoinbaseWalletProvider(options?.coinbase || {});
+				provider = cbProvider;
 				break;
+			}
 
 			default:
 				throw new Error(`Unknown wallet type: ${walletInfo.type}`);

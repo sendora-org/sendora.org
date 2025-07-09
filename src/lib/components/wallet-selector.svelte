@@ -1,7 +1,7 @@
 <!-- Wallet selector component | 钱包选择器组件 -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Loader2, AlertCircle, QrCode } from '@lucide/svelte';
+	import { Loader2, AlertCircle } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Alert, AlertDescription } from '$lib/components/ui/alert/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -46,9 +46,6 @@
 		error = null;
 		connectingWallet = wallet;
 
-		// Track wallet connection initiated | 跟踪钱包连接开始
-		const startTime = Date.now();
-
 		try {
 			// Special handling for WalletConnect | WalletConnect 的特殊处理
 			if (wallet.type === 'walletconnect') {
@@ -76,11 +73,10 @@
 			}
 
 			// Success - emit connect event | 成功 - 触发连接事件
-			const connectionTime = Date.now() - startTime;
 			onconnect?.();
-		} catch (err: any) {
+		} catch (err: unknown) {
 			console.error('Failed to connect wallet:', err);
-			error = err.message || m.wallet_connect_error();
+			error = (err as Error).message || m.wallet_connect_error();
 			showQRCode = false;
 			qrCodeUri = undefined;
 		} finally {
@@ -120,7 +116,7 @@
 						{m.wallet_browser_wallets()}
 					</h3>
 					<div class="space-y-2">
-						{#each groupedWallets.injected as wallet}
+						{#each groupedWallets.injected as wallet (wallet.uuid)}
 							<Button
 								variant="outline"
 								class="h-auto w-full justify-start gap-3 p-3"
@@ -161,7 +157,7 @@
 				{/if}
 
 				<div class="space-y-2">
-					{#each [...groupedWallets.walletconnect, ...groupedWallets.coinbase] as wallet}
+					{#each [...groupedWallets.walletconnect, ...groupedWallets.coinbase] as wallet (wallet.uuid)}
 						<Button
 							variant="outline"
 							class="h-auto w-full justify-start gap-3 p-3"

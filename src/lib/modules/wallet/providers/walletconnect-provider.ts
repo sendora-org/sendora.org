@@ -7,15 +7,6 @@ import { availableNetworks } from '$lib/stores/networks';
 import { get } from 'svelte/store';
 import type { EthereumProvider as BaseEthereumProvider } from '$lib/types/ethereum';
 
-// Extended type for WalletConnect provider | WalletConnect 提供者的扩展类型
-interface WalletConnectEthereumProvider extends Omit<BaseEthereumProvider, 'chainId'> {
-	// WalletConnect specific properties | WalletConnect 特定属性
-	session?: any;
-	accounts?: string[];
-	chainId?: number; // WalletConnect uses number instead of string | WalletConnect 使用数字而非字符串
-	removeAllListeners(event?: string): void;
-}
-
 // WalletConnect provider class | WalletConnect 提供者类
 export class WalletConnectProvider extends BaseWalletProvider {
 	// WalletConnect options | WalletConnect 选项
@@ -58,10 +49,11 @@ export class WalletConnectProvider extends BaseWalletProvider {
 			});
 
 			// Initialize WalletConnect provider | 初始化 WalletConnect 提供者
-			const provider = await (EthereumProvider as any).init({
+			const provider = await EthereumProvider.init({
 				// Type cast required for init method | init 方法需要类型转换
 				projectId: this.options.projectId || 'a1fab8b3829c9cf8508dd3ca9ca13a42', // Default project ID | 默认项目 ID
 				chains: chains.length > 0 ? chains : [1], // Default to mainnet if no chains | 如果没有链，默认主网
+				optionalChains: chains.length > 0 ? (chains as [number, ...number[]]) : [1], // Required for WalletConnect | WalletConnect 需要
 				showQrModal: this.options.showQrModal !== false, // Default to true | 默认为 true
 				rpcMap: { ...rpcMap, ...this.options.rpcMap }, // Merge custom RPC URLs | 合并自定义 RPC URLs
 				methods: [
@@ -103,18 +95,6 @@ export class WalletConnectProvider extends BaseWalletProvider {
 					this.qrCodeCallback(uri);
 				}
 			});
-
-			// Handle session request events to prevent warnings | 处理会话请求事件以防止警告
-			const sessionRequestHandler = (payload: any) => {
-				console.log('WalletConnect session request:', payload);
-			};
-			provider.on('session_request', sessionRequestHandler);
-
-			// Handle session request sent events | 处理会话请求发送事件
-			const sessionRequestSentHandler = (payload: any) => {
-				console.log('WalletConnect session request sent:', payload);
-			};
-			provider.on('session_request_sent', sessionRequestSentHandler);
 
 			// If no existing session, connect | 如果没有现有会话，连接
 			if (!provider.session) {
@@ -164,7 +144,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 			console.log('🎯 WalletConnect: Final return statement executing...');
 
 			return state;
-		} catch (error) {
+		} catch (error: unknown) {
 			// Clear QR code on error | 出错时清除二维码
 			this.qrCodeUri = undefined;
 			if (this.qrCodeCallback) {
@@ -181,14 +161,14 @@ export class WalletConnectProvider extends BaseWalletProvider {
 			// Remove all event listeners before disconnecting | 断开前移除所有事件监听器
 			try {
 				// Remove session request event listeners | 移除会话请求事件监听器
-				const wcProvider = this.provider as any;
+				const wcProvider = this.provider as { removeAllListeners?: (event: string) => void };
 				if (wcProvider && typeof wcProvider.removeAllListeners === 'function') {
 					wcProvider.removeAllListeners('session_request');
 					wcProvider.removeAllListeners('session_request_sent');
 					wcProvider.removeAllListeners('display_uri');
 					console.log('✅ WalletConnect: Event listeners removed');
 				}
-			} catch (error) {
+			} catch (error: unknown) {
 				console.warn('Failed to remove some event listeners:', error);
 			}
 
@@ -211,7 +191,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 
 	// Check if provider has an active session | 检查提供者是否有活动会话
 	hasSession(): boolean {
-		return (this.provider as any)?.session ? true : false;
+		return (this.provider as { session?: { connected?: boolean } })?.session ? true : false;
 	}
 
 	// Restore previous session if available | 如果可用，恢复之前的会话
@@ -220,7 +200,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 
 		try {
 			// Check if we already have a provider instance | 检查是否已经有提供者实例
-			if (this.provider && (this.provider as any).session) {
+			if (this.provider && (this.provider as { session?: { connected?: boolean } }).session) {
 				console.log('🔍 WalletConnect: Found existing provider with session');
 				// Verify the session is still valid | 验证会话是否仍然有效
 				try {
@@ -239,7 +219,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 						wallet: this.info,
 						timestamp: Date.now()
 					};
-				} catch (error) {
+				} catch (error: unknown) {
 					console.warn('❌ WalletConnect: Existing session is invalid:', error);
 					// Clear invalid session | 清除无效会话
 					this.provider = null;
@@ -269,9 +249,10 @@ export class WalletConnectProvider extends BaseWalletProvider {
 
 			console.log('🔧 WalletConnect: Initializing provider with options:', initOptions);
 
-			const provider = await (EthereumProvider as any).init({
+			const provider = await EthereumProvider.init({
 				projectId: initOptions.projectId || 'a1fab8b3829c9cf8508dd3ca9ca13a42',
 				chains: chains.length > 0 ? chains : [1],
+				optionalChains: chains.length > 0 ? (chains as [number, ...number[]]) : [1],
 				showQrModal: false, // Don't show QR for session restore | 会话恢复时不显示二维码
 				rpcMap: { ...rpcMap, ...initOptions.rpcMap },
 				// Add metadata for better session persistence | 添加元数据以获得更好的会话持久性
@@ -325,7 +306,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 
 			console.log('❌ WalletConnect: No valid session found');
 			return null;
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('❌ WalletConnect: Failed to restore session:', error);
 			// Clear any potentially corrupted state | 清除任何可能损坏的状态
 			this.clearSavedOptions();
@@ -359,11 +340,11 @@ export class WalletConnectProvider extends BaseWalletProvider {
 						const parsed = JSON.parse(value);
 						console.log(`📄 WalletConnect: ${key}:`, parsed);
 					}
-				} catch (e) {
+				} catch {
 					console.log(`📄 WalletConnect: ${key}: (non-JSON data)`);
 				}
 			});
-		} catch (error) {
+		} catch (error: unknown) {
 			console.warn('Failed to debug WalletConnect storage:', error);
 		}
 	}
@@ -379,7 +360,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 				timestamp: Date.now()
 			};
 			localStorage.setItem('sendora_walletconnect_options', JSON.stringify(optionsToSave));
-		} catch (error) {
+		} catch (error: unknown) {
 			console.warn('Failed to save WalletConnect options:', error);
 		}
 	}
@@ -403,7 +384,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 				projectId: parsed.projectId,
 				rpcMap: parsed.rpcMap
 			};
-		} catch (error) {
+		} catch (error: unknown) {
 			console.warn('Failed to load saved WalletConnect options:', error);
 			this.clearSavedOptions();
 			return {};
@@ -416,7 +397,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 
 		try {
 			localStorage.removeItem('sendora_walletconnect_options');
-		} catch (error) {
+		} catch (error: unknown) {
 			console.warn('Failed to clear WalletConnect options:', error);
 		}
 	}
@@ -428,13 +409,13 @@ export class WalletConnectProvider extends BaseWalletProvider {
 		}
 		try {
 			// WalletConnect provider has accounts property | WalletConnect 提供者有 accounts 属性
-			const wcProvider = this.provider as any;
+			const wcProvider = this.provider as { accounts?: string[]; chainId?: number };
 			if (wcProvider.accounts && Array.isArray(wcProvider.accounts)) {
 				return wcProvider.accounts as Address[];
 			}
 			// Fallback to base implementation | 回退到基础实现
 			return await super.getAccounts();
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('WalletConnect getAccounts error:', error);
 			return [];
 		}
@@ -447,13 +428,13 @@ export class WalletConnectProvider extends BaseWalletProvider {
 		}
 		try {
 			// WalletConnect provider has chainId property | WalletConnect 提供者有 chainId 属性
-			const wcProvider = this.provider as any;
+			const wcProvider = this.provider as { chainId?: number };
 			if (typeof wcProvider.chainId === 'number') {
 				return wcProvider.chainId;
 			}
 			// Fallback to base implementation | 回退到基础实现
 			return await super.getChainId();
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('WalletConnect getChainId error:', error);
 			throw error;
 		}
@@ -497,7 +478,7 @@ export class WalletConnectProvider extends BaseWalletProvider {
 			this.listeners.push(() => this.provider?.removeListener('disconnect', disconnectHandler));
 
 			console.log('✅ WalletConnect: Event listeners set up successfully');
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('❌ WalletConnect: Failed to setup event listeners:', error);
 		}
 	}

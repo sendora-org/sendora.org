@@ -19,7 +19,6 @@
 		isConnected,
 		currentAccount,
 		connectedWallet,
-		currentChainId,
 		disconnectWallet
 	} from '$lib/stores/wallet.js';
 	import { selectedNetwork } from '$lib/stores/networks.js';
@@ -118,7 +117,7 @@
 				try {
 					const provider = get(currentProvider);
 					if (provider && $currentAccount) {
-						const status = await getUserSubscription($currentAccount, provider);
+						const status = await getUserSubscription($currentAccount);
 						userStatus = status;
 					}
 				} catch (error) {

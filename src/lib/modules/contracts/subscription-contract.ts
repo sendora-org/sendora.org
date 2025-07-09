@@ -994,10 +994,7 @@ export function getTierName(tier: PlanTier): string {
 }
 
 // Get user's subscription status with SENDORA NFT check | 获取用户的订阅状态并检查 SENDORA NFT
-export async function getUserSubscription(
-	userAddress: string,
-	provider: any
-): Promise<{
+export async function getUserSubscription(userAddress: string): Promise<{
 	hasValidSubscription: boolean;
 	hasSendoraNFT: boolean;
 	subscriptionTier: PlanTier | null;
@@ -1154,7 +1151,7 @@ export async function getUserNFTCount(userAddress: string): Promise<number> {
 // Fetch user's subscription NFTs using paginated getUserNFTDetails | 使用分页的 getUserNFTDetails 获取用户的订阅 NFT
 export async function getUserSubscriptionNFTs(
 	userAddress: string,
-	provider: any,
+	_provider: unknown,
 	onNFTLoaded?: (nft: SubscriptionNFTMetadata) => void,
 	offset: number = 0,
 	limit: number = 50
@@ -1228,7 +1225,7 @@ export async function getUserSubscriptionNFTs(
 			});
 
 			// Parse metadata from the contract response | 从合约响应中解析元数据
-			let metadata: any = {};
+			let metadata: Record<string, unknown> = {};
 			try {
 				if (detail.metadata && detail.metadata.trim()) {
 					if (detail.metadata.startsWith('data:application/json')) {
@@ -1288,10 +1285,10 @@ export async function getUserSubscriptionNFTs(
 				purchaseDate,
 				tokenURI: detail.metadata || '',
 				metadata: {
-					name: metadata.name || tierName,
-					description: metadata.description || `${tierName} subscription NFT`,
-					image: metadata.image || `https://sendora.org/images/nft-${tier}.png`,
-					attributes: metadata.attributes || [
+					name: (metadata.name as string) || tierName,
+					description: (metadata.description as string) || `${tierName} subscription NFT`,
+					image: (metadata.image as string) || `https://sendora.org/images/nft-${tier}.png`,
+					attributes: (metadata.attributes as { trait_type: string; value: string | number }[]) || [
 						{ trait_type: 'Tier', value: tierName },
 						{ trait_type: 'Network', value: config.networkName },
 						{ trait_type: 'Valid', value: detail.isValid ? 'Active' : 'Expired' },

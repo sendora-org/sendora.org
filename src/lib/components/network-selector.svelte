@@ -76,21 +76,22 @@
 			try {
 				await switchChain(parseInt(network.chainId));
 				console.log(`✅ Successfully switched to ${network.name} (Chain ID: ${network.chainId})`);
-			} catch (error: any) {
+			} catch (error: unknown) {
 				console.error('Failed to switch network:', error);
 
 				// Determine error type and show appropriate message | 确定错误类型并显示相应消息
 				let errorMessage = '';
+				const err = error as { code?: number; message?: string };
 
-				if (error?.code === 4902) {
+				if (err?.code === 4902) {
 					// Network not found in wallet - wallet doesn't support this network | 钱包中未找到网络 - 钱包不支持此网络
 					errorMessage = m.network_switch_unsupported();
-				} else if (error?.code === 4001) {
+				} else if (err?.code === 4001) {
 					// User rejected the request | 用户拒绝了请求
 					errorMessage = 'Network switch was cancelled by user';
 				} else {
 					// Generic error | 通用错误
-					errorMessage = `${m.network_switch_error()}: ${error?.message || m.network_switch_generic_error()}`;
+					errorMessage = `${m.network_switch_error()}: ${err?.message || m.network_switch_generic_error()}`;
 				}
 
 				switchError = errorMessage;

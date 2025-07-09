@@ -68,7 +68,11 @@ export interface EIP6963ProviderDetail {
 		rdns: string;
 	};
 	// EIP-1193 provider | EIP-1193 提供者
-	provider: any;
+	provider: {
+		request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+		on: (event: string, handler: (...args: unknown[]) => void) => void;
+		removeListener: (event: string, handler: (...args: unknown[]) => void) => void;
+	};
 }
 
 // Wallet connection options | 钱包连接选项

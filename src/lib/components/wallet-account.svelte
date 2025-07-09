@@ -14,7 +14,6 @@
 	} from '$lib/stores/wallet';
 	import { selectedNetwork } from '$lib/stores/networks.js';
 	import { formatEther } from 'viem';
-	import { get } from 'svelte/store';
 	// import SubscriptionNFTDisplay from '$lib/components/wallet/SubscriptionNFTDisplay.svelte';
 
 	// Component props | 组件属性
@@ -134,7 +133,7 @@
 			<div class="flex items-center gap-2">
 				{#if $selectedNetwork}
 					<img
-						src={$selectedNetwork.avatar || `/chain-logo/evm_${$selectedNetwork.chainId}.png`}
+						src={`/chain-logo/evm_${$selectedNetwork.chainId}.png`}
 						alt={$selectedNetwork.name}
 						class="h-6 w-6 rounded-full"
 						onerror={(e) => ((e.currentTarget as HTMLImageElement).src = '/chain-logo/unknown.png')}

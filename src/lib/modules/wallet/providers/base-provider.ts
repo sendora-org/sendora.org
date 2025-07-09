@@ -11,7 +11,7 @@ import {
 } from 'viem';
 import type { ConnectionState, WalletInfo, WalletProvider } from '../types';
 import type { EthereumProvider } from '$lib/types/ethereum';
-import { availableNetworks } from '$lib/stores/networks';
+import { availableNetworks, type NetworkInfo } from '$lib/stores/networks';
 import { get } from 'svelte/store';
 
 // Base wallet provider class | 基础钱包提供者类
@@ -74,9 +74,9 @@ export abstract class BaseWalletProvider implements WalletProvider {
 				method: 'wallet_switchEthereumChain',
 				params: [{ chainId: `0x${chainId.toString(16)}` }]
 			});
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// If chain doesn't exist, try to add it | 如果链不存在，尝试添加它
-			if (error.code === 4902) {
+			if ((error as { code?: number }).code === 4902) {
 				const networks = get(availableNetworks);
 				const network = networks.find((n) => parseInt(n.chainId) === chainId);
 				if (network) {
@@ -91,7 +91,7 @@ export abstract class BaseWalletProvider implements WalletProvider {
 	}
 
 	// Add a new chain to the wallet | 向钱包添加新链
-	protected async addChain(network: any): Promise<void> {
+	protected async addChain(network: NetworkInfo): Promise<void> {
 		if (!this.provider) {
 			throw new Error('Provider not initialized');
 		}

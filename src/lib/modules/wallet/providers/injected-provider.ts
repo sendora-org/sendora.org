@@ -112,16 +112,16 @@ export class InjectedWalletProvider extends BaseWalletProvider {
 		let name = 'Browser Wallet';
 		let icon = '/images/wallet-icons/browser.svg';
 
-		if ((window.ethereum as any).isMetaMask) {
+		if ((window.ethereum as { isMetaMask?: boolean }).isMetaMask) {
 			name = 'MetaMask';
 			icon = '/images/wallet-icons/metamask.svg';
-		} else if ((window.ethereum as any).isRabby) {
+		} else if ((window.ethereum as { isRabby?: boolean }).isRabby) {
 			name = 'Rabby';
 			icon = '/images/wallet-icons/rabby.svg';
-		} else if ((window.ethereum as any).isBraveWallet) {
+		} else if ((window.ethereum as { isBraveWallet?: boolean }).isBraveWallet) {
 			name = 'Brave Wallet';
 			icon = '/images/wallet-icons/brave.svg';
-		} else if ((window.ethereum as any).isCoinbaseWallet) {
+		} else if ((window.ethereum as { isCoinbaseWallet?: boolean }).isCoinbaseWallet) {
 			name = 'Coinbase Wallet';
 			icon = '/images/wallet-icons/coinbase.svg';
 		}

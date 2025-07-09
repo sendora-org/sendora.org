@@ -6,7 +6,7 @@ import type { ConnectionState, CoinbaseWalletOptions } from '../types';
 // Coinbase wallet provider class | Coinbase 钱包提供者类
 export class CoinbaseWalletProvider extends BaseWalletProvider {
 	// Coinbase SDK instance | Coinbase SDK 实例
-	private sdk: any;
+	private sdk: ReturnType<typeof createCoinbaseWalletSDK> | null = null;
 	// Coinbase wallet options | Coinbase 钱包选项
 	private options: CoinbaseWalletOptions;
 
@@ -19,11 +19,7 @@ export class CoinbaseWalletProvider extends BaseWalletProvider {
 			type: 'coinbase'
 		});
 		this.options = options;
-		this.initializeSDK();
-	}
-
-	// Initialize Coinbase SDK | 初始化 Coinbase SDK
-	private initializeSDK(): void {
+		// Initialize Coinbase SDK | 初始化 Coinbase SDK
 		this.sdk = createCoinbaseWalletSDK({
 			appName: this.options.appName || 'Sendora',
 			appLogoUrl: this.options.appLogoUrl || 'https://sendora.app/logo.png',
@@ -36,7 +32,7 @@ export class CoinbaseWalletProvider extends BaseWalletProvider {
 	async connect(): Promise<ConnectionState> {
 		try {
 			// Create provider | 创建提供者
-			this.provider = this.sdk.getProvider();
+			this.provider = this.sdk!.getProvider();
 
 			// Request accounts | 请求账户
 			const accounts = (await this.provider!.request({
@@ -75,7 +71,10 @@ export class CoinbaseWalletProvider extends BaseWalletProvider {
 		if (typeof window === 'undefined') return false;
 
 		// Check for Coinbase Wallet browser extension | 检查 Coinbase 钱包浏览器扩展
-		return !!((window.ethereum as any)?.isCoinbaseWallet || window.coinbaseWalletExtension);
+		return !!(
+			(window.ethereum as { isCoinbaseWallet?: boolean })?.isCoinbaseWallet ||
+			(window as { coinbaseWalletExtension?: unknown }).coinbaseWalletExtension
+		);
 	}
 
 	// Get preference display name | 获取偏好显示名称

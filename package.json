@@ -29,6 +29,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/node": "^24.0.10",
+		"@types/qrcode": "^1.5.5",
 		"@vitest/browser": "^3.2.3",
 		"autocorrect-node": "^2.14.0",
 		"eslint": "^9.18.0",
