@@ -1,38 +1,150 @@
-# sv
+# Sendora - Web3 Developer Tools Platform
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+[English](./README.md) | [中文](./README.zh.md)
 
-## Creating a project
+<p align="center">
+  <img src="./static/logo.svg" alt="Sendora Logo" width="120" height="120">
+</p>
 
-If you're seeing this, you've probably already done this step. Congrats!
+<p align="center">
+  <strong>Professional Web3 Developer Tools for Smart Contract Deployment, Transaction Broadcasting, and DeFi Operations</strong>
+</p>
+
+<p align="center">
+  <a href="https://sendora.org">Live Demo</a> •
+  <a href="/docs">Documentation</a> •
+  <a href="https://discord.gg/YQp7fzv2G5">Discord</a>
+</p>
+
+## 🌟 Overview
+
+Sendora is a comprehensive Web3 developer tools platform built with SvelteKit 5, providing professional-grade tools for blockchain developers and DeFi enthusiasts. The platform offers a suite of essential tools for smart contract interaction, transaction management, and multi-chain operations.
+
+## ✨ Key Features
+
+### 🛠️ Core Tools
+
+- **Deploy Contracts** - Deploy smart contracts across multiple EVM chains with constructor parameter support
+- **Broadcast Transaction** - Broadcast pre-signed transactions with real-time status tracking
+- **Signthis** - Sign messages and transactions with multiple wallet providers
+- **Callthis** - Interact with deployed smart contracts, including read/write operations
+
+### 🔗 Multi-Chain Support
+
+- Ethereum Mainnet & Testnets
+- Polygon (MATIC)
+- BNB Smart Chain
+- Arbitrum & Optimism
+- Base
+- 100+ EVM-compatible chains
+
+### 💼 Wallet Integration
+
+- MetaMask
+- WalletConnect v2
+- Coinbase Wallet
+- Injected Web3 Providers
+
+### 🎨 User Experience
+
+- **Responsive Design** - Optimized for desktop and mobile devices
+- **Dark/Light Theme** - Automatic theme detection with manual override
+- **Internationalization** - Full support for English and Chinese languages
+- **Real-time Updates** - Live transaction status and gas price tracking
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm 8+ (recommended) or npm
+
+### Installation
 
 ```bash
-# create a new project in the current directory
-npx sv create
+# Clone the repository
+git clone https://github.com/sendora-org/sendora-next.git
+cd sendora-next
 
-# create a new project in my-app
-npx sv create my-app
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
 ```
 
-## Developing
+The application will be available at `http://localhost:5173`
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Building for Production
 
 ```bash
-npm run dev
+# Build the application
+pnpm build
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# Preview production build
+pnpm preview
 ```
 
-## Building
+## 🏗️ Tech Stack
 
-To create a production version of your app:
+- **Framework**: [SvelteKit 5](https://kit.svelte.dev/) with Svelte 5 runes
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with [shadcn-svelte](https://www.shadcn-svelte.com/)
+- **Blockchain**: [viem](https://viem.sh/) for Ethereum interactions
+- **Wallet Connection**: Custom providers with WalletConnect v2 support
+- **Internationalization**: [Paraglide](https://inlang.com/m/gerre34r/library-inlang-paraglideJs)
+- **Testing**: Vitest + Playwright
+
+## 📖 Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- [Getting Started Guide](/docs/getting-started)
+- [API Reference](/docs/api-reference)
+- [Tools Overview](/docs/tools-overview)
+- [Examples](/docs/examples)
+
+## 🧪 Testing
 
 ```bash
-npm run build
+# Run unit tests
+pnpm test:unit
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run all tests
+pnpm test
 ```
 
-You can preview the production build with `npm run preview`.
+## 🤝 Contributing
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [SvelteKit](https://kit.svelte.dev/)
+- UI components from [shadcn-svelte](https://www.shadcn-svelte.com/)
+- Blockchain interactions powered by [viem](https://viem.sh/)
+- Icons from [Lucide](https://lucide.dev/)
+
+## 📞 Support
+
+- [Discord Community](https://discord.gg/YQp7fzv2G5)
+- [GitHub Issues](https://github.com/sendora-org/sendora-next/issues)
+- Email: garyshay@proton.me
+
+---
+
+<p align="center">
+  Made with ❤️ by the Sendora Team
+</p>
