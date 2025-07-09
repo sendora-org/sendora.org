@@ -148,6 +148,26 @@ function applyOverrides(networks: NetworkInfo[]): NetworkInfo[] {
 	});
 }
 
+// Get network from current URL | 从当前 URL 获取网络
+function getNetworkFromCurrentUrl(): NetworkInfo | null {
+	if (!browser) return null;
+
+	try {
+		const chainId = new URLSearchParams(window.location.search).get('network');
+		if (chainId) {
+			// Load both built-in and custom networks | 加载内置和自定义网络
+			const customNetworksList = loadCustomNetworks();
+			const networksList = [...applyOverrides(defaultNetworks), ...customNetworksList];
+
+			return networksList.find((n) => n.chainId === chainId) || null;
+		}
+		return null;
+	} catch (error) {
+		console.error('Failed to parse network from URL:', error);
+		return null;
+	}
+}
+
 // Initialize stores with proper client-side handling | 使用适当的客户端处理初始化存储
 function initializeStores() {
 	if (!browser) {
@@ -165,11 +185,18 @@ function initializeStores() {
 	const customNetworksList = loadCustomNetworks();
 	const networksList = [...applyOverrides(defaultNetworks), ...customNetworksList];
 
+	// Get initial network from URL or default to Ethereum (chainId=1) | 从 URL 获取初始网络或默认为以太坊 (chainId=1)
+	let initialNetwork = getNetworkFromCurrentUrl();
+	if (!initialNetwork) {
+		// Default to Ethereum (chainId=1) | 默认为以太坊 (chainId=1)
+		initialNetwork = networksList.find((n) => n.chainId === '1') || networksList[0] || null;
+	}
+
 	return {
 		overrides,
 		customNetworks: customNetworksList,
 		availableNetworks: networksList,
-		selectedNetwork: networksList[0] || null
+		selectedNetwork: initialNetwork
 	};
 }
 
@@ -319,9 +346,62 @@ export function removeCustomNetwork(chainId: string): void {
 	});
 }
 
+// Update URL with network parameter | 更新 URL 中的网络参数
+function updateUrlWithNetwork(chainId: string): void {
+	if (!browser) return;
+
+	try {
+		const url = new URL(window.location.href);
+		url.searchParams.set('network', chainId);
+		window.history.replaceState({}, '', url.toString());
+	} catch (error) {
+		console.error('Failed to update URL with network:', error);
+	}
+}
+
 // Select a network | 选择网络
 export function selectNetwork(network: NetworkInfo): void {
 	selectedNetwork.set(network);
+	// Update URL with the selected network | 更新 URL 中的选中网络
+	updateUrlWithNetwork(network.chainId);
+}
+
+// Select a network without updating URL | 选择网络但不更新 URL
+export function selectNetworkSilently(network: NetworkInfo): void {
+	selectedNetwork.set(network);
+}
+
+// Initialize URL synchronization with network selection | 初始化 URL 与网络选择的同步
+export function initializeNetworkUrlSync(): (() => void) | void {
+	if (!browser) return;
+
+	// Handle browser navigation events (back/forward) | 处理浏览器导航事件（前进/后退）
+	const handlePopState = () => {
+		const networkFromUrl = getNetworkFromCurrentUrl();
+		if (networkFromUrl) {
+			// Update selected network without updating URL to avoid infinite loop | 更新选中网络但不更新 URL 以避免无限循环
+			selectNetworkSilently(networkFromUrl);
+		} else {
+			// If no network in URL, default to Ethereum (chainId=1) | 如果 URL 中没有网络，默认为以太坊 (chainId=1)
+			const availableNetworksList = [...applyOverrides(defaultNetworks), ...loadCustomNetworks()];
+			const ethereumNetwork =
+				availableNetworksList.find((n) => n.chainId === '1') || availableNetworksList[0];
+			if (ethereumNetwork) {
+				selectNetworkSilently(ethereumNetwork);
+			}
+		}
+	};
+
+	// Listen for browser navigation events | 监听浏览器导航事件
+	window.addEventListener('popstate', handlePopState);
+
+	// Perform initial sync when function is called | 调用函数时执行初始同步
+	handlePopState();
+
+	// Return cleanup function | 返回清理函数
+	return () => {
+		window.removeEventListener('popstate', handlePopState);
+	};
 }
 
 // Check if a network is built-in | 检查网络是否为内置网络

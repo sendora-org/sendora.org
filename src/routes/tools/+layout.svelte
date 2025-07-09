@@ -4,8 +4,18 @@
 
 	import NetworkSelector from '$lib/components/network-selector.svelte';
 	// import WalletConnectButton from '$lib/components/wallet-connect-button.svelte';
+	import { initializeNetworkUrlSync } from '$lib/stores/networks';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
+
+	// Initialize URL synchronization when component mounts | 组件挂载时初始化 URL 同步
+	onMount(() => {
+		const cleanup = initializeNetworkUrlSync();
+
+		// Return cleanup function for onDestroy | 返回清理函数给 onDestroy
+		return cleanup;
+	});
 </script>
 
 <Sidebar.Provider>

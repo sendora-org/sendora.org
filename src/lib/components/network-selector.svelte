@@ -18,7 +18,6 @@
 		type NetworkInfo
 	} from '$lib/stores/networks';
 	import NetworkForm from './network-form.svelte';
-	import { get } from 'svelte/store';
 
 	// Component props | 组件属性
 	interface Props {
@@ -157,6 +156,11 @@
 		return `/chain-logo/evm_${network.chainId}.png`;
 	}
 
+	// Reactive logo URL for selected network | 选中网络的响应式 logo URL
+	let selectedNetworkLogo = $derived.by(() => {
+		return $selectedNetwork ? getNetworkLogo($selectedNetwork) : '/chain-logo/unknown.png';
+	});
+
 	// Handle logo error | 处理 logo 加载错误
 	function handleLogoError(event: Event) {
 		const img = event.target as HTMLImageElement;
@@ -173,7 +177,7 @@
 					<!-- Selected network display | 选中网络显示 -->
 					<div class="flex items-center gap-2">
 						<img
-							src={getNetworkLogo($selectedNetwork)}
+							src={selectedNetworkLogo}
 							alt={$selectedNetwork.name}
 							class="h-5 w-5 rounded-full"
 							onerror={handleLogoError}
