@@ -22,6 +22,9 @@ RUN pnpm build
 # Production stage | 生产阶段
 FROM node:20-alpine
 
+# Install wget for healthcheck | 安装 wget 用于健康检查
+RUN apk add --no-cache wget
+
 # Install pnpm | 安装 pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
@@ -42,6 +45,9 @@ EXPOSE 3000
 
 # Set environment to production | 设置环境为生产
 ENV NODE_ENV=production
+
+# Set default port | 设置默认端口
+ENV PORT=3000
 
 # Start application | 启动应用
 CMD ["node", "build"]

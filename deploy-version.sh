@@ -87,6 +87,13 @@ EOF
 deploy_version() {
     print_step "Deploying version $VERSION to $ENVIRONMENT..."
     
+    # Set port based on environment | 根据环境设置端口
+    if [ "$ENVIRONMENT" = "production" ]; then
+        PORT=7000
+    else
+        PORT=7001
+    fi
+    
     # Create docker-compose file for this version | 为此版本创建 docker-compose 文件
     cat > "$DEPLOY_DIR/docker-compose.yml" << EOF
 version: '3.8'
@@ -141,7 +148,12 @@ EOF
     
     if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then
         print_error "Application failed to start!"
+        print_error "Container logs:"
         docker logs sendora-$ENVIRONMENT --tail 50
+        print_error "Container status:"
+        docker ps -a | grep sendora-$ENVIRONMENT
+        print_error "Port check:"
+        netstat -tlnp 2>/dev/null | grep :$PORT || ss -tlnp | grep :$PORT || echo "Port $PORT not listening"
         return 1
     fi
     
