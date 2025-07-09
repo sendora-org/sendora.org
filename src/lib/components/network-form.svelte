@@ -1,6 +1,5 @@
 <!-- Network form for adding/editing networks | 网络表单用于添加/编辑网络 -->
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -13,15 +12,13 @@
 	interface Props {
 		/** Network to edit (null for adding new) | 要编辑的网络（新增时为 null） */
 		network?: NetworkInfo | null;
+		/** Callback when form is closed | 表单关闭时的回调 */
+		onclose?: () => void;
+		/** Callback when network is saved | 网络保存时的回调 */
+		onsave?: (network: NetworkInfo) => void;
 	}
 
-	let { network = null }: Props = $props();
-
-	// Event dispatcher | 事件调度器
-	const dispatch = createEventDispatcher<{
-		close: void;
-		save: NetworkInfo;
-	}>();
+	let { network = null, onclose, onsave }: Props = $props();
 
 	// Form state | 表单状态
 	let formData = $state({
@@ -183,8 +180,8 @@
 				addCustomNetwork(networkData);
 			}
 
-			dispatch('save', networkData);
-			dispatch('close');
+			onsave?.(networkData);
+			onclose?.();
 		} catch (error) {
 			errors.general = error instanceof Error ? error.message : 'Failed to save network';
 		} finally {
@@ -394,7 +391,7 @@
 			</div>
 		</div>
 		<div class="space-y-3">
-			{#each formData.rpcURLs as rpcUrl, index}
+			{#each formData.rpcURLs as rpcUrl, index (index)}
 				<div class="space-y-1">
 					<div class="flex items-center gap-2">
 						<!-- Radio button for default RPC selection | 默认 RPC 选择单选按钮 -->
@@ -494,7 +491,7 @@
 			type="button"
 			variant="outline"
 			class="flex-1"
-			onclick={() => dispatch('close')}
+			onclick={() => onclose?.()}
 			disabled={isSubmitting}
 		>
 			{m.network_form_cancel()}

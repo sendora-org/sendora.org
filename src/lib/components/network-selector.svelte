@@ -139,7 +139,7 @@
 	}
 
 	// Handle form save | 处理表单保存
-	function handleFormSave(event: CustomEvent<NetworkInfo>) {
+	function handleFormSave(network: NetworkInfo) {
 		// Form already handles the save operation, we just need to close the form | 表单已经处理保存操作，我们只需要关闭表单
 		handleFormClose();
 	}
@@ -308,6 +308,6 @@
 			</Sheet.Title>
 		</Sheet.Header>
 
-		<NetworkForm network={editingNetwork} on:close={handleFormClose} on:save={handleFormSave} />
+		<NetworkForm network={editingNetwork} onclose={handleFormClose} onsave={handleFormSave} />
 	</Sheet.Content>
 </Sheet.Root>
