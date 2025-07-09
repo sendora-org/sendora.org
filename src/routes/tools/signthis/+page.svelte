@@ -72,7 +72,7 @@
 	// Tab navigation data | 标签导航数据
 	let tabItems = $derived.by(() => [
 		{
-			id: 'personal',
+			id: 'message',
 			label: m.signthis_message_signing(),
 			icon: FileText
 		},
