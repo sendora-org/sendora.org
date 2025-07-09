@@ -2,6 +2,7 @@
 	import TrendingUpIcon from '@lucide/svelte/icons/trending-up';
 	import RadioIcon from '@lucide/svelte/icons/radio';
 	import LangToggle from '$lib/components/ui/lang-toggle.svelte';
+	import PenToolIcon from '@lucide/svelte/icons/pen-tool';
 </script>
 
 <script lang="ts">
@@ -33,9 +34,9 @@
 					icon: RadioIcon
 				},
 				{
-					title: 'as',
-					url: '/tools/broadcast',
-					icon: RadioIcon
+					title: m.tools_signthis_title(),
+					url: '/tools/signthis',
+					icon: PenToolIcon
 				},
 				{
 					title: 'as12',
