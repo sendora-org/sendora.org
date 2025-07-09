@@ -73,10 +73,8 @@
 
 	// Ensure valid RPC selection when URLs change | 当 RPC URLs 变化时确保有效选择
 	$effect(() => {
-		// Watch for changes in RPC URLs | 监听 RPC URLs 的变化
-		formData.rpcURLs;
-
 		// If selected index is out of bounds or points to empty URL, find first valid one | 如果选中索引超出范围或指向空 URL，找到第一个有效的
+		// This effect will re-run whenever formData.rpcURLs changes | 当 formData.rpcURLs 变化时，此 effect 会重新运行
 		if (
 			selectedRpcIndex >= formData.rpcURLs.length ||
 			selectedRpcIndex < 0 ||
@@ -391,7 +389,7 @@
 			</div>
 		</div>
 		<div class="space-y-3">
-			{#each formData.rpcURLs as rpcUrl, index (index)}
+			{#each formData.rpcURLs as rpcURL, index (`${index}-${rpcURL}`)}
 				<div class="space-y-1">
 					<div class="flex items-center gap-2">
 						<!-- Radio button for default RPC selection | 默认 RPC 选择单选按钮 -->
@@ -401,7 +399,7 @@
 							value={index}
 							checked={selectedRpcIndex === index}
 							onchange={() => (selectedRpcIndex = index)}
-							disabled={!formData.rpcURLs[index].trim()}
+							disabled={!rpcURL.trim()}
 							class="h-4 w-4 text-purple-600 focus:ring-purple-500"
 						/>
 						<Input
@@ -413,8 +411,8 @@
 							type="button"
 							variant="outline"
 							size="sm"
-							onclick={() => testRpcEndpoint(formData.rpcURLs[index], index)}
-							disabled={!formData.rpcURLs[index].trim() || rpcStatuses[index]?.isChecking}
+							onclick={() => testRpcEndpoint(rpcURL, index)}
+							disabled={!rpcURL.trim() || rpcStatuses[index]?.isChecking}
 						>
 							{#if rpcStatuses[index]?.isChecking}
 								<Loader2 class="h-4 w-4 animate-spin" />
