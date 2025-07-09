@@ -3,7 +3,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 
 	import NetworkSelector from '$lib/components/network-selector.svelte';
-	// import WalletConnectButton from '$lib/components/wallet-connect-button.svelte';
+	import WalletConnectButton from '$lib/components/wallet-connect-button.svelte';
 	import { initializeNetworkUrlSync } from '$lib/stores/networks';
 	import { onMount } from 'svelte';
 
@@ -30,7 +30,7 @@
 			<!-- Network and wallet controls | 网络和钱包控制 -->
 			<div class="flex items-center gap-1 pr-4">
 				<NetworkSelector class="" />
-				<!-- <WalletConnectButton /> -->
+				<WalletConnectButton />
 			</div>
 		</header>
 		<main class="flex-1 p-4">

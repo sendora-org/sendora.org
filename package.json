@@ -53,12 +53,15 @@
 		"vitest-browser-svelte": "^0.1.0"
 	},
 	"dependencies": {
+		"@coinbase/wallet-sdk": "^4.3.4",
 		"@inlang/paraglide-js": "^2.0.0",
 		"@lucide/svelte": "^0.525.0",
 		"@sinclair/typebox": "^0.34.37",
+		"@walletconnect/ethereum-provider": "^2.21.4",
 		"bits-ui": "^2.8.10",
 		"clsx": "^2.1.1",
 		"ox": "^0.8.3",
+		"qrcode": "^1.5.4",
 		"viem": "^2.31.7"
 	},
 	"pnpm": {

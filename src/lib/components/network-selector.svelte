@@ -18,6 +18,7 @@
 		type NetworkInfo
 	} from '$lib/stores/networks';
 	import NetworkForm from './network-form.svelte';
+	import { get } from 'svelte/store';
 
 	// Component props | 组件属性
 	interface Props {
@@ -70,40 +71,40 @@
 		showErrorAlert = false;
 
 		// Switch wallet to the selected network if connected | 如果已连接，切换钱包到选定网络
-		// const { isConnected, switchChain } = await import('$lib/stores/wallet.js');
-		// if (get(isConnected)) {
-		// 	try {
-		// 		await switchChain(parseInt(network.chainId));
-		// 		console.log(`✅ Successfully switched to ${network.name} (Chain ID: ${network.chainId})`);
-		// 	} catch (error: any) {
-		// 		console.error('Failed to switch network:', error);
+		const { isConnected, switchChain } = await import('$lib/stores/wallet.js');
+		if (get(isConnected)) {
+			try {
+				await switchChain(parseInt(network.chainId));
+				console.log(`✅ Successfully switched to ${network.name} (Chain ID: ${network.chainId})`);
+			} catch (error: any) {
+				console.error('Failed to switch network:', error);
 
-		// 		// Determine error type and show appropriate message | 确定错误类型并显示相应消息
-		// 		let errorMessage = '';
+				// Determine error type and show appropriate message | 确定错误类型并显示相应消息
+				let errorMessage = '';
 
-		// 		if (error?.code === 4902) {
-		// 			// Network not found in wallet - wallet doesn't support this network | 钱包中未找到网络 - 钱包不支持此网络
-		// 			errorMessage = m.network_switch_unsupported();
-		// 		} else if (error?.code === 4001) {
-		// 			// User rejected the request | 用户拒绝了请求
-		// 			errorMessage = 'Network switch was cancelled by user';
-		// 		} else {
-		// 			// Generic error | 通用错误
-		// 			errorMessage = `${m.network_switch_error()}: ${error?.message || m.network_switch_generic_error()}`;
-		// 		}
+				if (error?.code === 4902) {
+					// Network not found in wallet - wallet doesn't support this network | 钱包中未找到网络 - 钱包不支持此网络
+					errorMessage = m.network_switch_unsupported();
+				} else if (error?.code === 4001) {
+					// User rejected the request | 用户拒绝了请求
+					errorMessage = 'Network switch was cancelled by user';
+				} else {
+					// Generic error | 通用错误
+					errorMessage = `${m.network_switch_error()}: ${error?.message || m.network_switch_generic_error()}`;
+				}
 
-		// 		switchError = errorMessage;
-		// 		showErrorAlert = true;
+				switchError = errorMessage;
+				showErrorAlert = true;
 
-		// 		// Auto-hide error after 8 seconds | 8 秒后自动隐藏错误
-		// 		setTimeout(() => {
-		// 			showErrorAlert = false;
-		// 			setTimeout(() => {
-		// 				switchError = null;
-		// 			}, 300); // Wait for fade out animation | 等待淡出动画
-		// 		}, 8000);
-		// 	}
-		// }
+				// Auto-hide error after 8 seconds | 8 秒后自动隐藏错误
+				setTimeout(() => {
+					showErrorAlert = false;
+					setTimeout(() => {
+						switchError = null;
+					}, 300); // Wait for fade out animation | 等待淡出动画
+				}, 8000);
+			}
+		}
 	}
 
 	// Handle network edit | 处理网络编辑
