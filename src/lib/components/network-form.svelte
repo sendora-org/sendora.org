@@ -63,9 +63,15 @@
 
 	let rpcStatuses = $state<Record<number, RpcStatus>>({});
 
+	// Track previous network to avoid unnecessary updates | 跟踪上一个网络以避免不必要的更新
+	let previousNetwork = $state<NetworkInfo | null>(null);
+	
 	// Watch for network prop changes and update form data | 监听 network prop 变化并更新表单数据
 	$effect(() => {
-		if (network) {
+		// Only update if network has actually changed | 只在网络确实发生变化时更新
+		if (network && network !== previousNetwork) {
+			previousNetwork = network;
+			
 			// Load network data into form | 将网络数据加载到表单
 			formData = {
 				name: network.name,
@@ -87,6 +93,9 @@
 			
 			// Clear any existing network detection | 清除已存在网络检测
 			existingNetwork = null;
+		} else if (!network && previousNetwork) {
+			// Reset when switching from edit to add mode | 从编辑切换到添加模式时重置
+			previousNetwork = null;
 		}
 	});
 
