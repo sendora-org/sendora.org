@@ -1,6 +1,6 @@
 <!-- Network selector component with search, logo display, and network management | 网络选择器组件，支持搜索、logo 显示和网络管理 -->
 <script lang="ts">
-	import { ChevronDown, Plus, Search, Settings, Trash2, AlertCircle } from '@lucide/svelte';
+	import { ChevronDown, Plus, Search, Settings, Trash2, AlertCircle, Check } from '@lucide/svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -63,7 +63,6 @@
 
 	// Handle network selection | 处理网络选择
 	async function handleNetworkSelect(network: NetworkInfo) {
-		const previousNetwork = get(selectedNetwork);
 		selectNetwork(network);
 		dropdownOpen = false;
 
@@ -142,6 +141,7 @@
 	function handleFormSave(network: NetworkInfo) {
 		// Form already handles the save operation, we just need to close the form | 表单已经处理保存操作，我们只需要关闭表单
 		handleFormClose();
+		console.log('handleFormSave', network);
 	}
 
 	// Handle switching from add to edit mode | 处理从添加切换到编辑模式
@@ -207,7 +207,10 @@
 				<div class="group relative">
 					<!-- Network item | 网络项 -->
 					<DropdownMenu.Item
-						class="flex cursor-pointer items-center gap-3 p-3"
+						class="flex cursor-pointer items-center gap-3 p-3 {$selectedNetwork?.chainId ===
+						network.chainId
+							? 'bg-accent'
+							: ''}"
 						onclick={() => handleNetworkSelect(network)}
 					>
 						<img
@@ -219,6 +222,7 @@
 						<div class="min-w-0 flex-1">
 							<div class="flex items-center gap-2">
 								<span class="truncate font-medium">{network.name}</span>
+
 								{#if network.isTestnet}
 									<Badge variant="secondary" class="text-xs">Testnet</Badge>
 								{/if}
@@ -232,6 +236,11 @@
 								<span>ID: {network.chainId}</span>
 							</div>
 						</div>
+
+						<!-- Selected indicator | 选中指示器 -->
+						{#if $selectedNetwork?.chainId === network.chainId}
+							<Check class="text-primary h-4 w-4 flex-shrink-0" />
+						{/if}
 
 						<!-- Network actions | 网络操作 -->
 						<div class="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
@@ -309,7 +318,7 @@
 
 <!-- Network form sheet | 网络表单页面 -->
 <Sheet.Root bind:open={showNetworkForm}>
-	<Sheet.Content side="right" class="w-full sm:w-[400px] overflow-y-auto">
+	<Sheet.Content side="right" class="w-full overflow-y-auto sm:w-[400px]">
 		<Sheet.Header>
 			<Sheet.Title>
 				{editingNetwork ? m.network_selector_edit_network() : m.network_selector_add_network()}
