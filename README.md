@@ -48,6 +48,9 @@ Sendora is a comprehensive Web3 developer tools platform built with SvelteKit 5,
 ### 🎨 User Experience
 
 - **Responsive Design** - Optimized for desktop and mobile devices
+- **Dark/Light Mode** - Comfortable viewing in any environment
+- **Multi-Language** - English and Chinese support
+- **Real-time Updates** - Live transaction status and gas prices
 - **Dark/Light Theme** - Automatic theme detection with manual override
 - **Internationalization** - Full support for English and Chinese languages
 - **Real-time Updates** - Live transaction status and gas price tracking
@@ -102,6 +105,52 @@ Comprehensive documentation is available in the `/docs` directory:
 - [API Reference](/docs/api-reference)
 - [Tools Overview](/docs/tools-overview)
 - [Examples](/docs/examples)
+
+## 🐳 Docker Deployment
+
+### Quick Server Setup
+
+```bash
+# One-click server setup
+curl -fsSL https://raw.githubusercontent.com/yourusername/sendora/main/server-setup.sh | bash
+```
+
+### Build and Deploy
+
+The system automatically builds Docker images on your server when you push code:
+- `main` branch → Deploys to staging environment
+- `prod` branch or tags → Deploys to production environment
+
+### Local Development with Docker
+
+```bash
+# Build Docker image
+docker build -t sendora:local .
+
+# Run with docker-compose
+docker compose up -d
+
+# View logs
+docker logs -f sendora
+```
+
+### Management Commands
+
+```bash
+# Check deployment status
+sendora-manage status
+
+# View application logs
+sendora-manage logs
+
+# Rollback to previous version
+sendora-manage rollback
+
+# List available versions
+sendora-manage versions
+```
+
+See [Deployment Guide](.github/DEPLOYMENT.md) for detailed instructions.
 
 ## 🧪 Testing
 

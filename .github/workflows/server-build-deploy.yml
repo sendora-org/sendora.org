@@ -1,0 +1,115 @@
+name: Server Build and Deploy
+
+on:
+  push:
+    branches: [ main, prod ]
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: [ main, prod ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    # Checkout code | 检出代码
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Set deployment environment | 设置部署环境
+    - name: Set deployment environment
+      id: deployment
+      run: |
+        # Default to staging | 默认为测试环境
+        ENVIRONMENT="staging"
+        VERSION="${GITHUB_SHA::8}"
+        
+        # Tag deployment (production) | 标签部署（生产环境）
+        if [[ $GITHUB_REF == refs/tags/v*.*.* ]]; then
+          ENVIRONMENT="production"
+          VERSION="${GITHUB_REF#refs/tags/}"
+        # Production branch | 生产分支
+        elif [[ $GITHUB_REF == refs/heads/prod ]]; then
+          ENVIRONMENT="production"
+          VERSION="prod-${GITHUB_SHA::8}"
+        # Main branch | 主分支（开发版本）
+        elif [[ $GITHUB_REF == refs/heads/main ]]; then
+          ENVIRONMENT="staging"
+          VERSION="main-${GITHUB_SHA::8}"
+        # Manual workflow | 手动触发
+        elif [[ $GITHUB_EVENT_NAME == "workflow_dispatch" ]]; then
+          ENVIRONMENT="${{ github.event.inputs.environment }}"
+          VERSION="manual-${GITHUB_SHA::8}"
+        fi
+        
+        echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Deploying version $VERSION to $ENVIRONMENT environment"
+
+    # Deploy to staging server | 部署到测试服务器
+    - name: Deploy to staging
+      if: steps.deployment.outputs.ENVIRONMENT == 'staging'
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.STAGING_USER }}
+        key: ${{ secrets.STAGING_KEY }}
+        port: ${{ secrets.STAGING_PORT }}
+        script: |
+          # Variables | 变量
+          VERSION="${{ steps.deployment.outputs.VERSION }}"
+          DEPLOY_DIR="/opt/sendora"
+          REPO_URL="${{ github.server_url }}/${{ github.repository }}.git"
+          
+          # Clone or update repository | 克隆或更新仓库
+          if [ ! -d "$DEPLOY_DIR/repo" ]; then
+            git clone "$REPO_URL" "$DEPLOY_DIR/repo"
+          fi
+          
+          cd "$DEPLOY_DIR/repo"
+          git fetch origin
+          git checkout ${{ github.sha }}
+          
+          # Build and deploy | 构建和部署
+          cd "$DEPLOY_DIR"
+          ./deploy-version.sh "$VERSION" "staging"
+
+    # Deploy to production server | 部署到生产服务器
+    - name: Deploy to production
+      if: steps.deployment.outputs.ENVIRONMENT == 'production'
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USER }}
+        key: ${{ secrets.PROD_KEY }}
+        port: ${{ secrets.PROD_PORT }}
+        script: |
+          # Variables | 变量
+          VERSION="${{ steps.deployment.outputs.VERSION }}"
+          DEPLOY_DIR="/opt/sendora"
+          REPO_URL="${{ github.server_url }}/${{ github.repository }}.git"
+          
+          # Clone or update repository | 克隆或更新仓库
+          if [ ! -d "$DEPLOY_DIR/repo" ]; then
+            git clone "$REPO_URL" "$DEPLOY_DIR/repo"
+          fi
+          
+          cd "$DEPLOY_DIR/repo"
+          git fetch origin
+          git checkout ${{ github.sha }}
+          
+          # Build and deploy | 构建和部署
+          cd "$DEPLOY_DIR"
+          ./deploy-version.sh "$VERSION" "production"

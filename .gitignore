@@ -26,3 +26,8 @@ vite.config.ts.timestamp-*
 # Paraglide
 src/lib/paraglide
 .VSCodeCounter
+
+# GitHub Actions secrets (never commit actual secrets!)
+.github/secrets
+.github/secrets.*
+!.github/secrets.example
