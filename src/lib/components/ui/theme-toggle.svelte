@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { theme, toggleTheme } from '$lib/stores/theme.js'; // 导入主题状态和切换函数 / Import theme state and toggle function
 	import { Button } from '$lib/components/ui/button/index.js'; // 导入按钮组件 / Import button component
-	import { Sun, Moon } from 'lucide-svelte'; // 导入图标 / Import icons
+	import { Sun, Moon } from '@lucide/svelte'; // 导入图标 / Import icons
 </script>
 
 <!-- 主题切换按钮 / Theme toggle button -->

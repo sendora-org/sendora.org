@@ -8,7 +8,7 @@
 	} from '$lib/components/ui/card';
 	import * as m from '$lib/paraglide/messages.js';
 	// Lucide icons for clear tool representation | 使用 Lucide 图标清晰表示工具功能
-	import { TrendingUp, Radio, Wallet, PenTool, Rocket, Send, BugPlay } from 'lucide-svelte';
+	import { TrendingUp, Radio, Wallet, PenTool, Rocket, Send, BugPlay } from '@lucide/svelte';
 
 	// Feature data structure | 功能数据结构
 	interface Feature {

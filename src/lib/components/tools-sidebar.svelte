@@ -1,6 +1,6 @@
 <script lang="ts" module>
-	import TrendingUpIcon from 'lucide-svelte/icons/trending-up';
-	import RadioIcon from 'lucide-svelte/icons/radio';
+	import TrendingUpIcon from '@lucide/svelte/icons/trending-up';
+	import RadioIcon from '@lucide/svelte/icons/radio';
 	import LangToggle from '$lib/components/ui/lang-toggle.svelte';
 </script>
 
