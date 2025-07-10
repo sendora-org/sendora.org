@@ -1051,7 +1051,7 @@
 	"txanalyzer_error_service_not_initialized": "分析器服务未初始化",
 	"txanalyzer_error_analysis_failed": "分析交易失败",
 	"theme": "主题",
-	"deploy_title": "部署合约",
+	"deploy_title": "Deploy contracts",
 	"deploy_subtitle": "将智能合约部署到区块链",
 	"deploy_tab_deploy": "部署",
 	"deploy_tab_history": "历史",
