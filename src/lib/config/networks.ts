@@ -85,3 +85,40 @@ export const networks: NetworkInfo[] = [
 		features: ['EIP1559', 'EIP7702']
 	}
 ];
+
+/**
+ * Get chain name by chain ID | 根据链 ID 获取链名称
+ * @param chainId - Chain ID | 链 ID
+ * @returns Chain name or chain ID as string if not found | 链名称或链 ID 字符串（如果未找到）
+ */
+export function getChainName(chainId: number): string {
+	const network = networks.find((n) => n.chainId === chainId.toString());
+	if (network) {
+		return network.name;
+	}
+
+	// Fallback chain names for common chains not in the list | 不在列表中的常见链的后备名称
+	const chainNames: Record<number, string> = {
+		1: 'Ethereum',
+		3: 'Ropsten',
+		4: 'Rinkeby',
+		5: 'Goerli',
+		42: 'Kovan',
+		97: 'BSC Testnet',
+		250: 'Fantom',
+		420: 'Optimism Goerli',
+		1284: 'Moonbeam',
+		1285: 'Moonriver',
+		4002: 'Fantom Testnet',
+		42161: 'Arbitrum',
+		42220: 'Celo',
+		43114: 'Avalanche',
+		80001: 'Polygon Mumbai',
+		84531: 'Base Goerli',
+		421613: 'Arbitrum Goerli',
+		11155111: 'Sepolia',
+		11155420: 'Optimism Sepolia'
+	};
+
+	return chainNames[chainId] || `Chain ${chainId}`;
+}

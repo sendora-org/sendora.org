@@ -3,6 +3,7 @@
 	import RadioIcon from '@lucide/svelte/icons/radio';
 	import LangToggle from '$lib/components/ui/lang-toggle.svelte';
 	import PenToolIcon from '@lucide/svelte/icons/pen-tool';
+	import RocketIcon from '@lucide/svelte/icons/rocket';
 </script>
 
 <script lang="ts">
@@ -37,6 +38,11 @@
 					title: m.tools_signthis_title(),
 					url: '/tools/signthis',
 					icon: PenToolIcon
+				},
+				{
+					title: m.tools_deploy_title(),
+					url: '/tools/deploy',
+					icon: RocketIcon
 				}
 			]
 		};

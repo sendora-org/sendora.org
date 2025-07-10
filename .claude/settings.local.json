@@ -5,7 +5,11 @@
 			"Bash(pnpm lint:*)",
 			"Bash(sed:*)",
 			"Bash(pnpm check:*)",
-			"Bash(npx eslint:*)"
+			"Bash(npx eslint:*)",
+			"Bash(ls:*)",
+			"Bash(rg:*)",
+			"Bash(grep:*)",
+			"Bash(grep:*)"
 		],
 		"deny": []
 	}

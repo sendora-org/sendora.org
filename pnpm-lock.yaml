@@ -29,6 +29,15 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      dexie:
+        specifier: ^4.0.11
+        version: 4.0.11
       ox:
         specifier: ^0.8.3
         version: 0.8.4(typescript@5.8.3)(zod@3.22.4)
@@ -1300,6 +1309,9 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
+
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
@@ -1363,6 +1375,9 @@ packages:
 
   devalue@5.1.1:
     resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
+
+  dexie@4.0.11:
+    resolution: {integrity: sha512-SOKO002EqlvBYYKQSew3iymBoN2EQ4BDw/3yprjh7kAfFzjBYkaMNa/pZvcA7HSWlcKSQb9XhPe3wKyQ0x4A8A==}
 
   dijkstrajs@1.0.3:
     resolution: {integrity: sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==}
@@ -4531,6 +4546,8 @@ snapshots:
 
   cssesc@3.0.0: {}
 
+  date-fns@4.1.0: {}
+
   dayjs@1.11.13: {}
 
   debug@4.4.1:
@@ -4564,6 +4581,8 @@ snapshots:
   detect-libc@2.0.4: {}
 
   devalue@5.1.1: {}
+
+  dexie@4.0.11: {}
 
   dijkstrajs@1.0.3: {}
 

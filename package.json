@@ -61,6 +61,9 @@
 		"@walletconnect/ethereum-provider": "^2.21.4",
 		"bits-ui": "^2.8.10",
 		"clsx": "^2.1.1",
+		"date-fns": "^4.1.0",
+		"dayjs": "^1.11.13",
+		"dexie": "^4.0.11",
 		"ox": "^0.8.3",
 		"qrcode": "^1.5.4",
 		"viem": "^2.31.7"

@@ -26,7 +26,7 @@
 </Alert>
 
 {#if errorMessage && errorLabel}
-	<div class="mt-4 space-y-2">
+	<div class="mt-4 space-y-2 overflow-auto">
 		<div class="text-sm font-medium text-red-600 dark:text-red-400">
 			{errorLabel}
 		</div>
