@@ -215,6 +215,9 @@ export async function connectWallet(
 		}
 
 		console.log('🎉 Wallet connection process completed successfully!');
+
+		// Try to switch to currently selected network after successful connection | 连接成功后尝试切换到当前选择的网络
+		trySwitchToSelectedNetwork();
 	} catch (error) {
 		console.error('🚀 STORE: Failed to connect wallet - caught error:', error);
 		console.error(
@@ -313,6 +316,33 @@ function setupEventListeners(provider: WalletProvider): void {
 	});
 }
 
+// Try to switch to currently selected network after wallet connection | 钱包连接后尝试切换到当前选择的网络
+async function trySwitchToSelectedNetwork(): Promise<void> {
+	try {
+		// Import selectedNetwork to avoid circular dependency | 导入 selectedNetwork 以避免循环依赖
+		const { selectedNetwork } = await import('$lib/stores/networks.js');
+		const { get } = await import('svelte/store');
+
+		const currentNetwork = get(selectedNetwork);
+		if (currentNetwork) {
+			const targetChainId = parseInt(currentNetwork.chainId);
+			const currentState = get(connectionState);
+
+			// Only switch if we're not already on the target network | 只有在不在目标网络时才切换
+			if (currentState.chainId !== targetChainId) {
+				console.log(
+					`🔄 Attempting to switch wallet to selected network: ${currentNetwork.name} (Chain ID: ${targetChainId})`
+				);
+				await switchChain(targetChainId);
+				console.log(`✅ Successfully switched wallet to ${currentNetwork.name}`);
+			}
+		}
+	} catch (error) {
+		// Don't fail on network switch errors | 网络切换错误时不要失败
+		console.warn('Failed to switch to selected network after wallet restoration:', error);
+	}
+}
+
 // Restore connection on app load | 应用加载时恢复连接
 export async function restoreConnection(): Promise<void> {
 	if (!browser) return;
@@ -364,6 +394,9 @@ export async function restoreConnection(): Promise<void> {
 
 					// Update saved state with new timestamp | 用新时间戳更新保存的状态
 					saveConnectionState(state);
+
+					// Try to switch to currently selected network | 尝试切换到当前选择的网络
+					trySwitchToSelectedNetwork();
 				} else {
 					console.log('❌ No valid WalletConnect session to restore, clearing saved state');
 					clearConnectionState();
@@ -387,6 +420,9 @@ export async function restoreConnection(): Promise<void> {
 			// For other wallet types, try to connect again | 对于其他钱包类型，尝试重新连接
 			console.log(`🔧 Restoring ${savedState.wallet.type} wallet...`);
 			await connectWallet(savedState.wallet);
+
+			// Try to switch to currently selected network after successful restoration | 恢复成功后尝试切换到当前选择的网络
+			trySwitchToSelectedNetwork();
 		}
 	} catch (error) {
 		console.error('❌ Failed to restore wallet connection:', error);
