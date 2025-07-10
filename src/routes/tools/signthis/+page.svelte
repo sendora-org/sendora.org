@@ -259,7 +259,7 @@
 			<div class="flex items-center gap-2 rounded-lg bg-amber-50 p-3 dark:bg-amber-950">
 				<AlertCircle class="size-4 text-amber-600 dark:text-amber-400" />
 				<div class="text-sm text-amber-700 dark:text-amber-300">
-					{m.signthis_connect_wallet()}
+					{m.wallet_connect()}
 				</div>
 			</div>
 		{/if}
