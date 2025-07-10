@@ -118,6 +118,7 @@ curl -fsSL https://raw.githubusercontent.com/yourusername/sendora/main/server-se
 ### Build and Deploy
 
 The system automatically builds Docker images on your server when you push code:
+
 - `main` branch → Deploys to staging environment
 - `prod` branch or tags → Deploys to production environment
 

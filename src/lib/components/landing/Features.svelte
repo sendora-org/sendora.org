@@ -16,6 +16,7 @@
 		title: string;
 		description: string;
 		gradient: string;
+		url: string;
 	}
 
 	// Icon component mapping | 图标组件映射
@@ -35,9 +36,9 @@
 	// Feature list with gradients | 带渐变的功能列表
 	const featureGradients = [
 		// { icon: 'analytics', gradient: 'from-purple to-purple-light' },
-		{ icon: 'broadcast', gradient: 'from-yellow to-yellow-light' },
+		{ icon: 'broadcast', gradient: 'from-yellow to-yellow-light', url: '/tools/broadcast' },
 		// { icon: 'balance', gradient: 'from-purple-dark to-purple' },
-		{ icon: 'signature', gradient: 'from-yellow-dark to-yellow' }
+		{ icon: 'signature', gradient: 'from-yellow-dark to-yellow', url: '/tools/signthis' }
 		// { icon: 'deploy', gradient: 'from-purple to-yellow' },
 		// { icon: 'callthis', gradient: 'from-purple to-yellow' }
 		// { icon: 'multisend', gradient: 'from-yellow to-purple' }
@@ -45,7 +46,7 @@
 
 	// Get feature data dynamically | 动态获取功能数据
 	function getFeatures(): Feature[] {
-		return featureGradients.map(({ icon, gradient }) => {
+		return featureGradients.map(({ icon, gradient, url }) => {
 			// Map icon names to message keys | 将图标名称映射到消息键
 			const messageKey =
 				icon === 'multisend'
@@ -88,7 +89,8 @@
 				icon,
 				title,
 				description,
-				gradient
+				gradient,
+				url
 			};
 		});
 	}
@@ -143,12 +145,13 @@
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-2">
 			{#each getFeatures() as feature, index (index)}
 				<!-- Premium feature card | 高端功能卡片 -->
-				<div
-					class="feature-card-wrapper animate-fade-in-up"
+				<a
+					href={feature.url}
+					class="feature-card-wrapper animate-fade-in-up block"
 					style="animation-delay: {index * 0.1}s"
 				>
 					<Card
-						class="feature-card group border-foreground/10 bg-card/50 hover:bg-card/90 relative h-full overflow-hidden backdrop-blur-sm transition-all duration-500"
+						class="feature-card group border-foreground/10 bg-card/50 hover:bg-card/90 relative h-full cursor-pointer overflow-hidden backdrop-blur-sm transition-all duration-500"
 					>
 						<!-- Subtle gradient overlay on hover | 悬停时的微妙渐变叠加 -->
 						<div
@@ -191,7 +194,7 @@
 							class="ring-purple/0 group-hover:ring-purple/30 absolute inset-0 rounded-lg ring-1 transition-all duration-500"
 						></div>
 					</Card>
-				</div>
+				</a>
 			{/each}
 		</div>
 	</div>
@@ -221,6 +224,7 @@
 	:global(.feature-card-wrapper) {
 		transform-style: preserve-3d;
 		perspective: 1000px;
+		text-decoration: none;
 	}
 	/* Fade in up animation | 淡入上升动画 */
 	@keyframes fadeInUp {
