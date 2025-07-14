@@ -5,6 +5,9 @@ import { InjectedWalletProvider } from '$lib/modules/wallet/providers/injected-p
 import { WalletConnectProvider } from '$lib/modules/wallet/providers/walletconnect-provider';
 import { CoinbaseWalletProvider } from '$lib/modules/wallet/providers/coinbase-provider';
 import { browser } from '$app/environment';
+import { createPublicClient, http, type PublicClient, type WalletClient } from 'viem';
+import { mainnet, sepolia, polygon, bsc, goerli, polygonMumbai, bscTestnet } from 'viem/chains';
+import { availableNetworks } from '$lib/stores/networks';
 
 // Connection state store | 连接状态存储
 export const connectionState = writable<ConnectionState>({
@@ -24,6 +27,16 @@ export const isConnected = derived(connectionState, ($state) => $state.connected
 export const currentAccount = derived(connectionState, ($state) => $state.accounts[0] || null);
 export const currentChainId = derived(connectionState, ($state) => $state.chainId);
 export const connectedWallet = derived(connectionState, ($state) => $state.wallet || null);
+
+// Wallet store for compatibility | 兼容性钱包存储
+export const walletStore = derived([connectionState, currentProvider], ([$state, $provider]) => ({
+	isConnected: $state.connected,
+	account: $state.accounts[0] || null,
+	chainId: $state.chainId,
+	wallet: $state.wallet || null,
+	provider: $provider,
+	accounts: $state.accounts
+}));
 
 // Local storage key | 本地存储键
 const STORAGE_KEY = 'sendora_wallet_connection';
@@ -433,6 +446,85 @@ export async function restoreConnection(): Promise<void> {
 			connected: false
 		});
 	}
+}
+
+// Chain mapping | 链映射
+const CHAIN_MAP = {
+	1: mainnet,
+	5: goerli,
+	11155111: sepolia,
+	137: polygon,
+	80001: polygonMumbai,
+	56: bsc,
+	97: bscTestnet
+};
+
+// Get chain by ID | 通过 ID 获取链
+function getChainById(chainId: number) {
+	// 从 availableNetworks store 中获取网络信息 | Get network info from availableNetworks store
+	const networks = get(availableNetworks);
+	const networkInfo = networks.find((n) => parseInt(n.chainId) === chainId);
+
+	if (networkInfo) {
+		// 将 NetworkInfo 转换为 viem 链对象 | Convert NetworkInfo to viem chain object
+		return {
+			id: chainId,
+			name: networkInfo.name,
+			nativeCurrency: {
+				name: networkInfo.symbol, // 使用 symbol 作为 native currency name | Use symbol as native currency name
+				symbol: networkInfo.symbol,
+				decimals: 18 // 大部分 EVM 链的原生代币都是 18 位小数 | Most EVM chains use 18 decimals for native token
+			},
+			rpcUrls: {
+				default: {
+					http: [networkInfo.rpcURLs[0]] // 使用第一个 RPC URL | Use first RPC URL
+				}
+			},
+			blockExplorers: networkInfo.explorerURL
+				? {
+						default: {
+							name: `${networkInfo.name} Explorer`,
+							url: networkInfo.explorerURL
+						}
+					}
+				: undefined
+		};
+	}
+
+	// 如果没有找到对应的网络，回退到静态映射 | If no matching network found, fallback to static mapping
+	return CHAIN_MAP[chainId as keyof typeof CHAIN_MAP] || mainnet;
+}
+
+// Get public client | 获取公共客户端
+export async function getPublicClient(chainId: number): Promise<PublicClient> {
+	const chain = getChainById(chainId);
+	return createPublicClient({
+		chain,
+		transport: http()
+	});
+}
+
+// Get wallet client | 获取钱包客户端
+export async function getWalletClient(): Promise<WalletClient | null> {
+	const provider = get(currentProvider);
+	if (!provider) return null;
+
+	const walletClient = await provider.getWalletClient();
+	return walletClient;
+	// // Get the current provider's ethereum instance | 获取当前提供者的以太坊实例
+	// const ethereum = (provider as any).getEthereumProvider
+	// 	? (provider as any).getEthereumProvider()
+	// 	: null;
+	// if (!ethereum) return null;
+
+	// const state = get(connectionState);
+	// const chain = getChainById(state.chainId);
+
+	// return createWalletClient({
+	// 	account: state.accounts[0] as `0x${string}`,
+	// 	chain,
+	// 	transport: custom(ethereum)
+	// });
 }
 
 // Initialize wallet discovery on app load | 应用加载时初始化钱包发现

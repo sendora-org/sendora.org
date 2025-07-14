@@ -17,6 +17,9 @@ importers:
       '@lucide/svelte':
         specifier: ^0.525.0
         version: 0.525.0(svelte@5.35.4)
+      '@shazow/whatsabi':
+        specifier: ^0.22.2
+        version: 0.22.2(@noble/hashes@1.8.0)(typescript@5.8.3)(zod@3.22.4)
       '@sinclair/typebox':
         specifier: ^0.34.37
         version: 0.34.37
@@ -44,6 +47,9 @@ importers:
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
+      svelte-sonner:
+        specifier: ^1.0.5
+        version: 1.0.5(svelte@5.35.4)
       viem:
         specifier: ^2.31.7
         version: 2.31.7(typescript@5.8.3)(zod@3.22.4)
@@ -699,6 +705,11 @@ packages:
 
   '@scure/bip39@1.6.0':
     resolution: {integrity: sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==}
+
+  '@shazow/whatsabi@0.22.2':
+    resolution: {integrity: sha512-I/8JkT473CnB4fJYHRklc/Lr9T7cw7OZ2HGQq++jCZT5tPDlEmUTJDsjKfzIDT9RhNk4LtRZaWi/kuUl4E9zIg==}
+    peerDependencies:
+      '@noble/hashes': ^1
 
   '@sinclair/typebox@0.31.28':
     resolution: {integrity: sha512-/s55Jujywdw/Jpan+vsy6JZs1z2ZTGxTmbZTPiuSL2wz9mfzA2gN1zzaqmvfi4pq+uOt7Du85fkiwv5ymW84aQ==}
@@ -2249,6 +2260,11 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
+  runed@0.28.0:
+    resolution: {integrity: sha512-k2xx7RuO9hWcdd9f+8JoBeqWtYrm5CALfgpkg2YDB80ds/QE4w0qqu34A7fqiAwiBBSBQOid7TLxwxVC27ymWQ==}
+    peerDependencies:
+      svelte: ^5.7.0
+
   runed@0.29.2:
     resolution: {integrity: sha512-0cq6cA6sYGZwl/FvVqjx9YN+1xEBu9sDDyuWdDW1yWX7JF2wmvmVKfH+hVCZs+csW+P3ARH92MjI3H9QTagOQA==}
     peerDependencies:
@@ -2369,6 +2385,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-sonner@1.0.5:
+    resolution: {integrity: sha512-9dpGPFqKb/QWudYqGnEz93vuY+NgCEvyNvxoCLMVGw6sDN/3oVeKV1xiEirW2E1N3vJEyj5imSBNOGltQHA7mg==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte-toolbelt@0.9.3:
     resolution: {integrity: sha512-HCSWxCtVmv+c6g1ACb8LTwHVbDqLKJvHpo6J8TaqwUme2hj9ATJCpjCPNISR1OCq2Q4U1KT41if9ON0isINQZw==}
@@ -3480,6 +3501,14 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
+
+  '@shazow/whatsabi@0.22.2(@noble/hashes@1.8.0)(typescript@5.8.3)(zod@3.22.4)':
+    dependencies:
+      '@noble/hashes': 1.8.0
+      ox: 0.7.1(typescript@5.8.3)(zod@3.22.4)
+    transitivePeerDependencies:
+      - typescript
+      - zod
 
   '@sinclair/typebox@0.31.28': {}
 
@@ -5384,6 +5413,11 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
+  runed@0.28.0(svelte@5.35.4):
+    dependencies:
+      esm-env: 1.2.2
+      svelte: 5.35.4
+
   runed@0.29.2(svelte@5.35.4):
     dependencies:
       esm-env: 1.2.2
@@ -5491,6 +5525,11 @@ snapshots:
       postcss-scss: 4.0.9(postcss@8.5.6)
       postcss-selector-parser: 7.1.0
     optionalDependencies:
+      svelte: 5.35.4
+
+  svelte-sonner@1.0.5(svelte@5.35.4):
+    dependencies:
+      runed: 0.28.0(svelte@5.35.4)
       svelte: 5.35.4
 
   svelte-toolbelt@0.9.3(svelte@5.35.4):

@@ -4,6 +4,7 @@
 	import LangToggle from '$lib/components/ui/lang-toggle.svelte';
 	import PenToolIcon from '@lucide/svelte/icons/pen-tool';
 	import RocketIcon from '@lucide/svelte/icons/rocket';
+	import BugIcon from '@lucide/svelte/icons/bug';
 </script>
 
 <script lang="ts">
@@ -43,6 +44,11 @@
 					title: m.tools_deploy_title(),
 					url: '/tools/deploy',
 					icon: RocketIcon
+				},
+				{
+					title: m.tools_callthis_title(),
+					url: '/tools/callthis',
+					icon: BugIcon
 				}
 			]
 		};
